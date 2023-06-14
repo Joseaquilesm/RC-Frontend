@@ -1,3 +1,32 @@
+<script>
+import axios from 'axios'
+
+
+
+
+export default {
+
+    
+    data() {
+        return {
+            inmuebles: []
+        }
+    },
+    mounted() {
+        fetch('http://127.0.0.1:8000/api/rcAPI/?format=json')
+            .then(res => res.json())
+            .then(data => this.inmuebles = data)
+            .catch(err => console.log(err.message))
+        },
+    methods: {
+        
+    }
+
+        
+}
+
+
+</script>
 <template>
     <body>
         <div class="banner">
@@ -22,15 +51,46 @@
                 </div>
             </div>
         </div>
+<div class="propiedades">
+    <h2>
+            Inmuebles
+        </h2>
+        <div>
+            <div class="collection">
+                <div v-for="inmueble in inmuebles" :key="inmueble.id" class="inmueble">
+                <router-link :to="{ title: 'title', params: { id: inmueble.id } }">
+                    <div class="card">
+                        <a class="inmueble_foto" href="#">
+                            <img v-bind:src="inmueble.image_link">
+                            </a>
+                     
+                            <div class="inmueble_nombre">
+                            <div>
+                                <div >{{ inmueble.title }}</div>
+                            </div>
+                        </div>
+                        <div class="inmueble_precio">
+                            <p>{{ filters.formatCurrency(inmueble.price_DOP) }}</p>
+                        </div>
+                    </div>
 
+                     
+                        
+                </router-link>
+            </div>
+            </div>
+            
+
+        </div>
+
+</div>
+       
     </body>
-
-
 </template>
 
 <style>
 .banner {
- 
+
     width: 100%;
     height: 450px;
     background-image: linear-gradient(rgba(26, 26, 26, 0.452), rgba(26, 26, 26, 0.452)), url(src/assets/images/kai-pilger-dpN2jHAEiYY-unsplash.jpg);
@@ -66,7 +126,8 @@
 
 }
 
-.btnComenzar ,.btnPropiedades {
+.btnComenzar,
+.btnPropiedades {
     border-radius: 50px;
     border-width: 0;
     color: #ffffff;
@@ -115,5 +176,41 @@
 
 }
 
+.collection{
+    display:grid;
+    grid-auto-columns: max-content;
+    grid-auto-flow: dense;
+    grid-auto-rows: minmax(100px, auto);
+    grid-gap: 25px;
+    grid-template-columns: repeat(4, 1fr);
+    margin: 60px auto;
+    max-width: 60%;
+    
+    
+}
+
+
+.inmueble_nombre{
+    font-family: nunito;
+    font-size: 20px;
+  
+}
+.inmueble_precio{
+ 
+ font-family: nunito;
+ font-size: 20px;
+
+}
+.collection img{
+    background-color: #e5e5e5;
+    width: 100%;
+    height: calc(100vh / 4);
+    border-radius: 5%;
+    
+}
+
+.propiedades{
+    margin-top:3%;
+}
 
 </style>

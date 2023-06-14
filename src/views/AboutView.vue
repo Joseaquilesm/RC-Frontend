@@ -1,32 +1,126 @@
 <template>
-    <div>
-        <h1>
-        Inmueble List
-        </h1>
-        <div v-for="inmueble in inmuebles" :key="inmueble.id" class="inmueble" >
-          <router-link :to="{ title: 'title', params: { id: inmueble.id }}">
-            <h4>
-                Nombre: {{ inmueble.title }}
-                Precio: {{ inmueble.price_DOP }}
-            </h4>
-        </router-link>
-        </div>
-        
-    </div>
+   <body>
+	<section>
+		<div class="product_container">
+			<div class="card">
+				<div class="content">
+					<div class="imgBx">
+						<img src="https://image.flaticon.com/icons/png/256/4213/4213732.png">
+					</div>
+					<div class="contentBx">
+						<h3>Lion<br><span>Happy Birthday</span></h3>
+					</div>
+				</div>
+				<ul class="sci">
+					<li>
+						<a href="">happy</a>
+					</li>
+					<li>
+						<a href="">birth</a>
+					</li>
+					<li>
+						<a href="">day</a>
+					</li>
+				</ul>
+			</div>
+		</div>
+	</section>
+</body>
 </template>
 
 <script>
-   export default{
-    data(){
-        return{
-            inmuebles:[]
-        }
-    },
-    mounted(){
-        fetch('http://127.0.0.1:8000/api/rcAPI/?format=json')
-        .then( res => res.json() )
-        .then(data => this.inmuebles = data)
-        .catch(err => console.log(err.message))
-    }
-   }
+  
+
+
+  
 </script>
+
+<style>
+
+
+
+
+
+
+
+
+.product_container .card {
+	position: relative;
+	width: 300px;
+	height: 400px;
+	background: rgba(255, 255, 255, 0.05);
+	margin: 20px;
+	box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
+	border-radius: 15px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	backdrop-filter: blur(10px);
+}
+
+.product_container .card .content {
+	position: relative;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	flex-direction: column;
+	transition: 0.5s;
+}
+
+.product_container .card:hover .content {
+	transform: translateY(-20px);
+}
+
+.product_container .card .content .imgBx {
+	position: relative;
+	width: 150px;
+	height: 150px;
+	overflow: hidden;
+}
+
+.product_container .card .content .imgBx img {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+}
+
+.product_container .card .content .contentBx h3 {
+	color: #fff;
+	text-transform: uppercase;
+	letter-spacing: 2px;
+	font-weight: 500;
+	font-size: 18px;
+	text-align: center;
+	margin: 20px 0 10px;
+	line-height: 1.1em;
+}
+
+.product_container .card .content .contentBx h3 span {
+	font-size: 12px;
+	font-weight: 300;
+	text-transform: initial;
+}
+
+.product_container .card .sci {
+	position: absolute;
+	bottom: 50px;
+	display: flex;
+}
+
+.product_container .card .sci li {
+	list-style: none;
+	margin: 0 10px;
+	transform: translateY(40px);
+	transition: 0.5s;
+	opacity: 0;
+}
+
+.product_container .card:hover .sci li {
+	transform: translateY(0px);
+	opacity: 1;
+}
+
+</style>
