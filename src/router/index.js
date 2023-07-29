@@ -4,6 +4,8 @@ import HomeView from "../views/HomeView.vue"
 import AboutView from "../views/AboutView.vue"
 import EstimateView from "../views/EstimateView.vue"
 import ResultView from "../views/ResultView.vue"
+import LoginView from "../views/LoginView.vue"
+import RegisterView from "../views/RegisterView.vue"
 
 const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
@@ -27,6 +29,16 @@ const router = createRouter({
             path: "/resultado",
             name: "Resultado",
             component:ResultView
+        },
+        {
+            path: "/login",
+            name: "login",
+            component:LoginView
+        },
+        {
+            path: "/register",
+            name: "register",
+            component:RegisterView
         },
         	
     ]

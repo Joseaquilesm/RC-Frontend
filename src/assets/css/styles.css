@@ -1,258 +1,49 @@
-<script>
-import axios from 'axios'
+/* Template: Evolo - StartUp HTML Landing Page Template
+   Author: Inovatik
+   Created: June 2019
+   Description: Master CSS file
+*/
+
+/*****************************************
+Table Of Contents:
+
+01. General Styles
+02. Preloader
+03. Navigation
+04. Header
+05. Customers
+06. Services
+07. Details 1
+08. Details 2
+09. Details Lightboxes
+10. Pricing
+11. Request
+12. Video
+13. Testimonials
+14. About
+15. Contact
+16. Footer
+17. Copyright
+18. Back To Top Button
+19. Extra Pages
+20. Media Queries
+******************************************/
+
+/*****************************************
+Colors:
+- Backgrounds - turquoise #00bfd8
+- Backgrounds - blue #0079f9
+- Backgrounds - light gray #f7fcfd
+- Buttons, bullets, icons, links - turquoise #00bfd8
+- Cards border, inputs border - light gray #c4d8dc
+- Text headers, navbar links - black #393939
+- Text body - black #626262
+******************************************/
 
 
-
-
-</script>
-<template>
-   <body data-spy="scroll" data-target=".fixed-top">
-    
-    <!-- Preloader 
-	<div class="spinner-wrapper">
-        <div class="spinner">
-            <div class="bounce1"></div>
-            <div class="bounce2"></div>
-            <div class="bounce3"></div>
-        </div>
-    </div>
-     -->
-    
-
-    <!-- Navigation -->
-  
-    <!-- end of navigation -->
-
-
-    <!-- Header -->
-    <header id="header" class="header">
-        <div class="header-content">
-            <div class="container">
-                <div class="row">
-                    <div class="col-lg-6">
-                        <div class="text-container">
-                            <h1><span class="turquoise">Descubre el precio de </span> renta de tu inmueble</h1>
-                            <p class="p-large">El primer paso para emprender tu negocio en bienes raíces.</p>
-                            <a class="btn-solid-lg page-scroll" href="#about">¡Valida mi propiedad!</a>
-                        </div> <!-- end of text-container -->
-                    </div> <!-- end of col -->
-                    <div class="col-lg-6">
-                        <img class="img-fluid" src="src\assets\images\house.svg" alt="alternative">
-                        <div class="image-container">
-                        </div> <!-- end of image-container -->
-                    </div> <!-- end of col -->
-                </div> <!-- end of row -->
-            </div> <!-- end of container -->
-        </div> <!-- end of header-content -->
-    </header> <!-- end of header -->
-    <!-- end of header -->
-    <br>
-    <br>
-    <!-- Services -->
-    <div id="about" class="cards-1">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-12">
-                    <h2>Para los emprendedores dominicanos</h2>
-                    <p class="p-heading p-large">Te ayudamos a dar el primer paso para iniciar tu negocio en bienes raíces. <span class="turquoise"><strong>Calculamos el precio de valoración de renta de tu propiedad</strong></span></p>
-                </div> <!-- end of col -->
-            </div> <!-- end of row -->
-            <div class="row">
-                <div class="col-lg-12">
-
-                    <!-- Card -->
-                    <div class="card">
-                        <img class="card-image" src="src\assets\images\facil.svg" alt="alternative">
-                        <div class="card-body">
-                            <h4 class="card-title">Fácil</h4>
-                            <p>Una herramienta de uso sencillo, sólo describemos tu inmueble.</p>
-                        </div>
-                    </div>
-                    <!-- end of card -->
-
-                    <!-- Card -->
-                    <div class="card">
-                        <img class="card-image" src="src\assets\images\gratis.svg" alt="alternative">
-                        <div class="card-body">
-                            <h4 class="card-title">Gratis</h4>
-                            <p>¡Esta herramienta es completamente gratis!</p>
-                        </div>
-                    </div>
-                    <!-- end of card -->
-
-                    <!-- Card -->
-                    <div class="card">
-                        <img class="card-image" src="src\assets\images\rapido.svg" alt="alternative">
-                        <div class="card-body">
-                            <h4 class="card-title">Rápido</h4>
-                            <p>En pocos minutos sabrás un precio tentativo de tu propiedad.</p>
-                        </div>
-                    </div>
-                    <!-- end of card -->
-                    
-                </div> <!-- end of col -->
-            </div> <!-- end of row -->
-        </div> <!-- end of container -->
-    </div> <!-- end of cards-1 -->
-    <!-- end of services -->
-    
-    <!-- Details 2 -->
-    <div class="basic-2">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-6">
-                    <div class="image-container">
-                        <img class="img-fluid" src="src\assets\images\house_rent_map.png" alt="alternative">
-                    </div> <!-- end of image-container -->
-                </div> <!-- end of col -->
-                <div class="col-lg-6">
-                    <div class="text-container">
-                        <h2>Una herramienta para los dominicanos</h2>
-                        <ul class="list-unstyled li-space-lg">
-                            <li class="media">
-                                <div style="font-size: 20px;" class="media-body">¡Entrenada con publicaciones de rentas en todo el país, 
-                                    el precio de tu precio lo determinamos directamente del comportamiento del mercado dominicano!</div>
-                            </li>
-                            <li class="media">
-                                <img class="img-fluid" style="margin-left: 140px; max-height:120px; max-width:auto;" src="src\assets\images\dominican_flag.png" alt="alternative">
-                            </li>
-                        </ul>
-                    </div> <!-- end of text-container -->
-                </div> <!-- end of col -->
-            </div> <!-- end of row -->
-        </div> <!-- end of container -->
-    </div> <!-- end of basic-2 -->
-    <!-- end of details 2 -->
-
-    <!-- About -->
-    <div class="basic-4">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-12">
-                    <h2>Conoce al equipo de desarrollo</h2>
-                    <p class="p-heading p-large">¡Conecta con nosotros!<br>Somos egresados de la Pontificia Universidad Madre y Maestra (PUCMM)</p>
-                </div> <!-- end of col -->
-            </div> <!-- end of row -->
-            <div class="row">
-                <div class="col-lg-12">
-                    <!-- Team Member -->
-                    <div class="team-member">
-                        <div class="image-wrapper">
-                            <img class="img-fluid" src="src\assets\images\man_developer.png" alt="alternative">
-                        </div> <!-- end of image wrapper -->
-                        <p class="p-large"><strong>José Aquiles Mora</strong></p>
-                        <p class="job-title">Ingeniero en Sistemas</p>
-                        <span class="social-icons">
-                            <span class="fa-stack">
-                                <a href="https://github.com/Joseaquilesm" target="_blank">
-                                    <i class="fas fa-circle fa-stack-2x linkedin"></i>
-                                    <i class="fab fa-github fa-stack-1x fa-inverse"></i>
-                                </a>
-                            </span>
-                            <span class="fa-stack">
-                                <a href="mailto:20140677@ce.pucmm.edu.do">
-                                    <i class="fas fa-circle fa-stack-2x twitter"></i>
-                                    <i class="fa fa-envelope fa-stack-1x fa-inverse"></i>
-                                </a>
-                            </span>
-                        </span> <!-- end of social-icons -->
-                    </div> <!-- end of team-member -->
-                    <!-- end of team member -->
-
-                    <!-- Team Member -->
-                    <div class="team-member">
-                        <div class="image-wrapper">
-                            <img class="img-fluid" src="src\assets\images\woman_developer.png" alt="alternative">
-                        </div> <!-- end of image wrapper -->
-                        <p class="p-large"><strong>Kiana Almonte</strong></p>
-                        <p class="job-title">Ingeniera en Sistemas</p>
-                        <span class="social-icons">
-                            <span class="fa-stack">
-                                <a href="https://www.linkedin.com/in/kiana-almonte-8958b2284?lipi=urn%3Ali%3Apage%3Ad_flagship3_profile_view_base_contact_details%3BpSmKs5jQRwKavrJLIDkaDg%3D%3D"  target="_blank">
-                                    <i class="fas fa-circle fa-stack-2x facebook"></i>
-                                    <i class="fab fa-linkedin-in fa-stack-1x"></i>
-                                </a>
-                            </span>
-                            <span class="fa-stack">
-                                <a href="mailto:kianaalmonted@gmail.com">
-                                    <i class="fas fa-circle fa-stack-2x twitter"></i>
-                                    <i class="fa fa-envelope fa-stack-1x fa-inverse"></i>
-                                </a>
-                            </span>
-                        </span> <!-- end of social-icons -->
-                    </div> <!-- end of team-member -->
-                    <!-- end of team member -->
-                </div> <!-- end of col -->
-            </div> <!-- end of row -->
-        </div> <!-- end of container -->
-    </div> <!-- end of basic-4 -->
-    <!-- end of about -->
-
-
-    <!-- Contact -->
-    <div id="contact" class="form-2">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-12">
-                    <h2 style="font-size: 50px;">Contactos</h2>
-                    <br>
-                </div> <!-- end of col -->
-            </div> <!-- end of row -->
-            <div class="row">
-                <div class="col-lg-6">
-                    <div class="map-responsive">
-                        <img class="img-fluid" style="margin-left: 110px; max-height:250px; max-width:auto;"  src="src\assets\images\mail.svg" alt="alternative">
-                        <!--<iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d100939.98555098464!2d-122.507640204439!3d37.757814996609724!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x80859a6d00690021%3A0x4a501367f076adff!2sSan+Francisco%2C+CA%2C+USA!5e0!3m2!1sen!2sro!4v1498231462606" allowfullscreen></iframe> -->
-                    </div>
-                </div> <!-- end of col -->
-                <div class="col-lg-6">
-                    <div class="text-container">
-                        <h2>Envíanos un correo electrónico!</h2>
-                    <!-- Contact Form -->
-                    </div>
-                    <!-- end of contact form -->
-                    <div class="text-container">
-                        <ul class="list-unstyled li-space-lg">
-                            <li><i class="fas fa-envelope"></i><a class="turquoise" href="mailto:rentalcrawlerDO@gmail.com"> rentalcrawlerDO@gmail.com</a></li>
-                        </ul>
-                    <!-- Contact Form -->
-                    </div>
-                </div> <!-- end of col -->
-            </div> <!-- end of row -->
-        </div> <!-- end of container -->
-    </div> <!-- end of form-2 -->
-    <!-- end of contact -->
-
-
-    <!-- Footer -->
-    <div class="footer">
-        <div class="container">
-        </div> <!-- end of container -->
-    </div> <!-- end of footer -->  
-    <!-- end of footer -->
-
-
-    <!-- Copyright -->
-    <div class="copyright">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-12">
-                    <p class="p-small">Copyright © 2023 <a href="#header">Rental Crawler</a> - Todos los derechos reservados</p>
-                </div> <!-- end of col -->
-            </div> <!-- enf of row -->
-        </div> <!-- end of container -->
-    </div> <!-- end of copyright --> 
-    <!-- end of copyright -->
-    
-    	
-   
-   
-</body>
-</template>
-
-   
-
-<style scoped>
+/******************************/
+/*     01. General Styles     */
+/******************************/
 body,
 html {
     width: 100%;
@@ -328,7 +119,9 @@ a.turquoise {
 	color: #CE1126;
 }
 
-
+a.white {
+	color: #fff;
+}
 
 .testimonial-text {
 	font: italic 400 1rem/1.5rem "Raleway", sans-serif;
@@ -1471,7 +1264,7 @@ input[type='checkbox'] {
 .slider-2 {
 	padding-top: 7.5rem;
 	padding-bottom: 7rem;
-	background: url('/src/assets/images/testimonials-background.jpg') center center no-repeat;
+	background: url('../images/testimonials-background.jpg') center center no-repeat;
 	background-size: cover; 
 }
 
@@ -1617,7 +1410,7 @@ input[type='checkbox'] {
 .form-2 {
 	padding-top: 7rem;
 	padding-bottom: 6.25rem;
-	background: url('/src/assets/images/contact-background.jpg') center center no-repeat;
+	background: url('../images/contact-background.jpg') center center no-repeat;
 	background-size: cover; 
 }
 
@@ -2065,7 +1858,7 @@ a:hover.back-to-top {
 
 	/* Header */
 	.header {
-		background: url('/src/assets/images/header_background.png') center center no-repeat;
+		background: url('../images/header_background.png') center center no-repeat;
 		background-size: cover; 
 	}
 
@@ -2197,7 +1990,7 @@ a:hover.back-to-top {
 
 	/* Extra Pages */
 	.ex-header {
-		background: url('/src/assets/images/header_background.png') center center no-repeat;
+		background: url('../images/header_background.png') center center no-repeat;
 		background-size: cover;
 	}
 
@@ -2398,5 +2191,3 @@ a:hover.back-to-top {
 	/* end of extra pages */
 }
 /* end of min-width width 1200px */
-
-</style>

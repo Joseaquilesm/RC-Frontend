@@ -1,0 +1,95 @@
+<template>
+    	
+<main class="form-signin w-100 m-auto">
+  <form @submit.prevent="submit">
+  
+    <h1 class="h3 mb-3 fw-normal">Please register</h1>
+
+    <div class="form-floating">
+      <input v-model="data.name" type="text" class="form-control" id="floatingInput" placeholder="name@example.com">
+      <label for="floatingInput">Full Name</label>
+    </div>
+    <div class="form-floating">
+      <input v-model="data.email" type="email" class="form-control" id="floatingInput" placeholder="name@example.com">
+      <label for="floatingInput">Email</label>
+    </div>
+    <div class="form-floating">
+      <input v-model="data.password" type="password" class="form-control" id="floatingPassword" placeholder="Password">
+      <label for="floatingPassword">Password</label>
+    </div>
+
+    <div class="form-check text-start my-3">
+      
+    </div>
+    <button class="btn btn-primary w-100 py-2" type="submit">Sign in</button>
+  
+  </form>
+</main>
+
+</template>
+
+<script>
+import {reactive} from 'vue';
+import {useRouter} from 'vue-router';
+
+export default {
+    name: "Register",
+    setup() {
+        const data = reactive ( {
+            name: '',
+            email:'',
+            password: ''
+        });
+        
+        const router= useRouter();
+
+        const submit = async () =>{
+          await fetch('http://127.0.0.1:8000/api/register', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify(data)
+          });
+
+          await router.push('/login');
+        }
+
+    
+
+        return {
+            data,
+            submit
+        }
+    }
+}
+</script>
+
+
+<style scoped>
+html,
+body {
+  height: 100%;
+}
+
+.form-signin {
+  max-width: 330px;
+  padding: 1rem;
+}
+
+.form-signin .form-floating:focus-within {
+  z-index: 2;
+}
+
+.form-signin input[type="email"] {
+  margin-bottom: 10px;
+
+}
+
+.form-signin input[type="password"] {
+  margin-bottom: 10px;
+ 
+}
+.form-signin input[type="text"] {
+  margin-bottom: 10px;
+  
+}
+</style>

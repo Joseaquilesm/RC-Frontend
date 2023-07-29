@@ -1,94 +1,74 @@
 <script>
-import axios from 'axios'
+import axios from 'axios';
+import Multiselect from 'vue-multiselect';
 
 export default {
+  components: {Multiselect},
 
+  
   data() {
     return {
       estimado: "",
-      hideModal: true,
-      rooms: "",
-      bathrooms: 1,
-      squarefootage: "",
-      provincia: 2,
-      mediobano: false,
-      aguapotable: false,
-      ac: false,
-      areajuegos: false,
-      areaservicio: false,
-      ascensor: false,
-      balcon: false,
-      cisterna: false,
-      controlacceso: false,
-      cuartoservicio: false,
-      estar: false,
-      estudio: false,
-      familyroom: false,
-      gazebo: false,
-      gimnasio: false,
-      inversor: false,
-      jacuzzi: false,
-      lobby: false,
-      patio: false,
-      picuzzi: false,
-      piscina: false,
-      planta: false,
-      pozo: false,
-      satelite: false,
-      sauna: false,
-      seguridad: false,
-      shutters: false,
-      terraza: false,
-      vestidores: false,
-      closet: false,
+      bedrooms: "0",
+      beds: "0",
+      baths: "0",
+      province: "",
+      place_type: "",
+      place_description: "",
+      taggingSelected:[],
+      value: [
+        { }
+      ],
+      options: [
+        { name: 'Tv', code: '1' },
+        { name: 'Washer', code: '2' },
+        { name: 'Free parking', code: '3' },
+        { name: 'dedicated workspace', code: '4' },
+        { name: 'pool', code: '5' },
+        { name: 'fire pit', code: '6' },
+        { name: 'lake access', code: '7' },
+        { name: 'beach access', code: '8' },
+
+
+      ]
+    
     };
   },
 
 
   methods: {
-    exitmodal() {
-      this.hideModal = true;
-    },
-    async consultar() {
+    addTag (newTag) {
+  const tag = {
+    name: newTag,
+    code: newTag.substring(0, 2) + Math.floor((Math.random() * 10000000))
+  }
+  this.taggingOptions.push(tag)
+  this.taggingSelected.push(tag)
+  
+},
 
-      let result = await axios.post("http://127.0.0.1:8000/predict/", {
-        rooms: this.rooms,
-        bathrooms: Number.parseFloat(this.bathrooms),
-        squarefootage: this.squarefootage,
-        provincia: Number.parseFloat(this.provincia),
-        mediobano: this.mediobano,
-        aguapotable: this.aguapotable,
-        ac: this.ac,
-        areajuegos: this.areajuegos,
-        areaservicio: this.areaservicio,
-        ascensor: this.ascensor,
-        balcon: this.balcon,
-        cisterna: this.cisterna,
-        controlacceso: this.controlacceso,
-        cuartoservicio: this.cuartoservicio,
-        estar: this.estar,
-        estudio: this.estudio,
-        familyroom: this.familyroom,
-        gazebo: this.gazebo,
-        gimnasio: this.gimnasio,
-        inversor: this.inversor,
-        jacuzzi: this.jacuzzi,
-        lobby: this.lobby,
-        patio: this.patio,
-        picuzzi: this.picuzzi,
-        piscina: this.piscina,
-        planta: this.planta,
-        pozo: this.pozo,
-        satelite: this.satelite,
-        sauna: this.sauna,
-        seguridad: this.seguridad,
-        shutters: this.shutters,
-        terraza: this.terraza,
-        vestidores: this.vestidores,
+    async consultar() {
+      let result = await axios.post("http://127.0.0.1:8000/api/predict", {
+        
+        bedrooms: this.bedrooms,
+        beds: this.beds,
+        baths: this.baths,
+        province: this.province,
+        place_type: this.place_type,
+        place_description: this.place_description,
+        tv: this.taggingSelected[0],
+        washer: this.taggingSelected[1],
+        free_parking: this.taggingSelected[2],
+        dedicated_workspace: this.taggingSelected[3],
+        piscina: this.taggingSelected[4],
+        fire_pit: this.taggingSelected[5],
+        lake_access: this.taggingSelected[6],
+        beach_access: this.taggingSelected[7]
+
       });
       console.log(result.data);
       this.estimado = Intl.NumberFormat('en-US').format(Math.floor(result.data));
-      this.hideModal = false;
+      
     },
   },
 };
@@ -97,562 +77,2589 @@ export default {
 
 
 <template>
-  <div class="flex-container">
-    <form>
-      <h2>Ingresa la información de tu inmueble</h2>
-      <div class="form-item">
-        <label for="provincias">Provincia</label>
-        <select name="provincias" id="provincias" size="1" v-model="provincia">
-          <option value="1">Azua</option>
-          <option value="1">Bahoruco</option>
-          <option value="1">Barahona</option>
-          <option value="1">Dajabon</option>
-          <option value="1">Distrito Nacional</option>
-          <option value="1">Duarte</option>
-          <option value="1">El Seybo</option>
-          <option value="1">Elias Piña</option>
-          <option value="1">Espaillat</option>
-          <option value="1">Hato Mayor</option>
-          <option value="1">Hermanas Mirabal</option>
-          <option value="1">Independencia</option>
-          <option value="1">La Altagracia</option>
-          <option value="1">La Romana</option>
-          <option value="1">La Vega</option>
-          <option value="1">Maria Trinidad Sánchez </option>
-          <option value="1">Monseñor Nouel</option>
-          <option value="1">Monte Plata</option>
-          <option value="1">Montecristi</option>
-          <option value="1">Pedernales</option>
-          <option value="1">Peravia</option>
-          <option value="1">Puerto Plata</option>
-          <option value="1">Samaná</option>
-          <option value="1">San Cristobal</option>
-          <option value="1">San José de Ocoa</option>
-          <option value="1">San Juan</option>
-          <option value="1">San Pedro de Macorís</option>
-          <option value="1">Sánchez Ramírez</option>
-          <option value="1">Santiago</option>
-          <option value="1">Santiago Rodríguez</option>
-          <option value="1">Santo Domingo </option>
-          <option value="1">Valverde</option>
-        </select>
-      </div>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
+ 
+    <!-- Preloader -->
 
-      <div class="form-item">
-        <label for="tamaño">Tamaño</label>
-        <input type="number" name="square_footage" min="1" step="1" placeholder="0 m²" v-model="squarefootage">
-      </div>
+    <!-- end of preloader -->
 
-      <div class="form-item">
-        <label for="habitaciones">Habitaciones</label>
-        <input type="number" name="rooms" min="1" max="25" step="1" placeholder="1" v-model="rooms">
-      </div>
+    <!-- Header -->
+    <header id="header" class="ex-header">
+      <div class="container">
+        <div class="row">
+          <div class="col-md-12">
+            <h1><strong>Validación Inmobiliaria</strong></h1>
+          </div> <!-- end of col -->
+        </div> <!-- end of row -->
+      </div> <!-- end of container -->
+    </header> <!-- end of ex-header -->
+    <!-- end of header -->
 
-      <div class="form-item">
-        <label for="baños">Baños</label>
-        <select name="baños" id="baños" v-model="bathrooms">
-          <option value=1>1</option>
-          <option value=1.5>1.5</option>
-          <option value=2>2</option>
-          <option value=2.5>2.5</option>
-          <option value=3>3</option>
-          <option value=3.5>3.5</option>
-          <option value=4>4</option>
-          <option value=4.5>4.5</option>
-          <option value=5>5</option>
-          <option value=5.5>5.5</option>
-          <option value=6>6+</option>
-        </select>
-      </div>
+    <div class="container">
+      <div class="row">
+        <div class="formbold-main-wrapper">
+          <!-- Author: FormBold Team -->
+          <!-- Learn More: https://formbold.com -->
+          <div class="formbold-form-wrapper">
+            <h1><strong>Describe tu inmueble</strong></h1>
+            <hr>
+            <form action="" method="POST">
 
-      <div class="form=item" :class="{ 'slide-out-top': hideComodidades }">
-        <label class="comodidades">Comodidades</label>
-        <div>
-          <ul class="list">
+              <div class="form-outline">
+                <label class="form-label" for="typeNumber"><strong>Cantidad de habitaciones:</strong></label>
+                <input v-model="bedrooms" type="number" id="typeNumber" class="form-control">
+              </div>
 
  
-            <label class="toggle">
-              <input class="toggle-checkbox" type="checkbox" name="aguapotable" value="Item 1" v-model="aguapotable">
-              <div class="toggle-switch"></div>
-              <span class="toggle-label">Agua Potable</span>
-            </label>
+              <div class="form-outline"><br></div>
 
+              <div class="form-outline">
+                <label class="form-label" for="typeNumber"><strong>Cantidad de camas:</strong></label>
+                <input v-model="beds" type="number" id="typeNumber" class="form-control">
+              </div>
+
+              <div class="form-outline"><br></div>
+
+              <div class="form-outline">
+                <label class="form-label" for="typeNumber"><strong>Cantidad de baños:</strong></label>
+                <input v-model="baths" type="number" id="typeNumber" class="form-control">
+              </div>
+
+              <div class="form-outline"><br></div>
+
+              <label for="time" class="formbold-form-label"><strong>¿Dónde se encuentra su propiedad?</strong></label>
+              <!-- place description-->
+              <select v-model="province" class="form-select" aria-label="Default select example" placeholder="Seleccione">
+                
+                <option value="Azua">Azua</option>
+                <option value="Bahoruco">Bahoruco</option>
+                <option value="Barahona">Barahona</option>
+                <option value="Dajabon">Dajabón</option>
+                <option value="Duarte">Duarte</option>
+                <option value="El Seibo">El Seibo</option>
+                <option value="Elias Piña">Elías Piña</option>
+                <option value="Espaillat">Espaillat</option>
+                <option value="Hato Mayor">Hato Mayor</option>
+                <option value="Hermanas Mirabal">Hermanas Mirabal</option>
+                <option value="Independencia">Independencia</option>
+                <option value="La Altagracia">La Altagracia</option>
+                <option value="La Romana">La Romana</option>
+                <option value="La Vega">La Vega</option>
+                <option value="Maria Trinidad Sanchez">María Trinidad Sánchez</option>
+                <option value="Monseñor Nouel">Monseñor Nouel</option>
+                <option value="Monte Cristi">Monte Cristi</option>
+                <option value="Pedernales">Pedernales</option>
+                <option value="Peravia">Peravia</option>
+                <option value="Puerto Plata">Puerto Plata</option>
+                <option value="Samana">Samaná</option>
+                <option value="San Cristobal">San Cristóbal</option>
+                <option value="San Jose de Ocoa">San José de Ocoa</option>
+                <option value="San Juan">San Juan</option>
+                <option value="San Pedro De Macoris">San Pedro De Macorís</option>
+                <option value="Sanchez Ramirez">Sanchez Ramírez</option>
+                <option value="Santiago">Santiago</option>
+                <option value="Santiago Rodriguez">Santiago Rodríguez</option>
+                <option value="Santo Domingo">Santo Domingo</option>
+                <option value="Valverde">Valverde</option>
+                <option value="Distrito Nacional">Distrito Nacional</option>
+                <option value="Monte Plata">Monte Plata</option>
+              </select>
+
+              <div class="form-outline"><br></div>
+
+              <div class="form-outline">
+                <label for="time" class="formbold-form-label"><strong>¿Qué tanto de tu propiedad esta disponible a
+                    renta?</strong></label> <!-- place description-->
+                <select v-model="place_description" class="form-select" aria-label="Default select example" placeholder="Seleccione">
+                  <option value="Entire place">Propiedad completa</option>
+                  <option value="Partial">Parcialmente</option>
+                  <option value="Shared">Compartida</option>
+                </select>
+              </div>
+
+              <div class="form-outline"><br></div>
+
+              <div class="form-outline">
+                <label for="time" class="formbold-form-label"><strong>Tipo de propiedad</strong></label>
+                <!-- place description-->
+                <select v-model="place_type" class="form-select" aria-label="Default select example" placeholder="Seleccione">
+                  <option value="Casa">Casa</option>
+                  
+                  <option value="Apartamento">Apartamento</option>
+
+                  <option value="Cabanas">Cabanas</option>
+
+                  <option value="Domo">Domo</option>
+
+                  <option value="Granja">Granja</option>
+
+                  <option value="Hotel">Hotel</option>
+
+                </select>
+              </div>
+
+              <div class="form-outline"><br></div>
+             
+   <div class="form-outline">
+    <label for="time" class="formbold-form-label"><strong>Amenidades</strong></label>
+    <Multiselect   v-model="taggingSelected" 
+  :options="options"
+  :multiple="true"
+  :taggable="true"
+  @tag="addTag"
+  tag-placeholder="Add this as new tag"
+  placeholder="Seleccione"
+  label="name"
+  track-by="code" >
+    
+    </Multiselect>
+   </div>
+
+              <div class="form-outline"><br></div>
             
-            <label class="toggle">
-              <input class="toggle-checkbox" type="checkbox" name="ac" value="Item 1" v-model="ac">
-              <div class="toggle-switch"></div>
-              <span class="toggle-label">Aire Acondicionado</span>
-            </label>
-
+                <button v-on:click="consultar()" type="button" class="btn btn-danger">Calcula</button>
             
-            <label class="toggle">
-              <input class="toggle-checkbox" type="checkbox" name="areajuegos" value="Item 1" v-model="areajuegos">
-              <div class="toggle-switch"></div>
-              <span class="toggle-label">Area de Juegos Infantiles</span>
-            </label>
-          
-           
-            <label class="toggle">
-              <input class="toggle-checkbox" type="checkbox" name="areaservicio" value="Item 1" v-model="areaservicio">
-              <div class="toggle-switch"></div>
-              <span class="toggle-label">Area Servicio</span>
-            </label>
-         
-            <label class="toggle">
-              <input class="toggle-checkbox" type="checkbox" name="ascensor" value="Item 1" v-model="ascensor">
-              <div class="toggle-switch"></div>
-              <span class="toggle-label">Ascensor</span>
-            </label>
-          
-            <label class="toggle">
-              <input class="toggle-checkbox" type="checkbox" name="balcón" value="Item 1" v-model="balcon">
-              <div class="toggle-switch"></div>
-              <span class="toggle-label">Balcón</span>
-            </label>
+            </form>
+          </div>
 
-            <label class="toggle">
-              <input class="toggle-checkbox" type="checkbox" name="cisterna" value="Item 1" v-model="cisterna">
-              <div class="toggle-switch"></div>
-              <span class="toggle-label">Cisterna</span>
-            </label>
-
-        
-            <label class="toggle">
-              <input class="toggle-checkbox" type="checkbox" name="controlacceso" value="Item 1" v-model="controlacceso">
-              <div class="toggle-switch"></div>
-              <span class="toggle-label">Control de Acceso</span>
-            </label>
-
-            <label class="toggle">
-              <input class="toggle-checkbox" type="checkbox" name="cuartoservicio" value="Item 1" v-model="cuartoservicio">
-              <div class="toggle-switch"></div>
-              <span class="toggle-label">Cuarto de Servicio</span>
-            </label>
-            
-            <label class="toggle">
-              <input class="toggle-checkbox" type="checkbox" name="estar" value="Item 1" v-model="estar">
-              <div class="toggle-switch"></div>
-              <span class="toggle-label">Estar Familiar</span>
-            </label>
-
-            <label class="toggle">
-              <input class="toggle-checkbox" type="checkbox" name="estudio" value="Item 1" v-model="estudio">
-              <div class="toggle-switch"></div>
-              <span class="toggle-label">Estudio</span>
-            </label>
-        
-
-            <label class="toggle">
-              <input class="toggle-checkbox" type="checkbox" name="familyroom" value="Item 1" v-model="familyroom">
-              <div class="toggle-switch"></div>
-              <span class="toggle-label">Family Room</span>
-            </label>
-
-            
-            <label class="toggle">
-              <input class="toggle-checkbox" type="checkbox" name="gazebo" value="Item 1" v-model="gazebo">
-              <div class="toggle-switch"></div>
-              <span class="toggle-label">Gazebo</span>
-            </label>
-
-          
-            
-            <label class="toggle">
-              <input class="toggle-checkbox" type="checkbox" name="gimnasio" value="Item 1" v-model="gimnasio">
-              <div class="toggle-switch"></div>
-              <span class="toggle-label">Gimnasio</span>
-            </label>
-
-        
-            
-            <label class="toggle">
-              <input class="toggle-checkbox" type="checkbox" name="inversor" value="Item 1" v-model="inversor">
-              <div class="toggle-switch"></div>
-              <span class="toggle-label">Inversor</span>
-            </label>
-
-         
-            
-            <label class="toggle">
-              <input class="toggle-checkbox" type="checkbox" name="jacuzzi" value="Item 1" v-model="jacuzzi">
-              <div class="toggle-switch"></div>
-              <span class="toggle-label">Jacuzzi</span>
-            </label>
-
-         
-            
-            <label class="toggle">
-              <input class="toggle-checkbox" type="checkbox" name="lobby" value="Item 1" v-model="lobby">
-              <div class="toggle-switch"></div>
-              <span class="toggle-label">Lobby</span>
-            </label>
-
-        
-            
-            <label class="toggle">
-              <input class="toggle-checkbox" type="checkbox" name="patio" value="Item 1" v-model="patio">
-              <div class="toggle-switch"></div>
-              <span class="toggle-label">Patio</span>
-            </label>
-
-         
-            
-            <label class="toggle">
-              <input class="toggle-checkbox" type="checkbox" name="picuzzi" value="Item 1" v-model="picuzzi">
-              <div class="toggle-switch"></div>
-              <span class="toggle-label">Picuzzi</span>
-            </label>
-
-            
-            <label class="toggle">
-              <input class="toggle-checkbox" type="checkbox" name="piscina" value="Item 1" v-model="piscina">
-              <div class="toggle-switch"></div>
-              <span class="toggle-label">Piscina</span>
-            </label>
-
-            
-            <label class="toggle">
-              <input class="toggle-checkbox" type="checkbox" name="planta" value="Item 1" v-model="planta">
-              <div class="toggle-switch"></div>
-              <span class="toggle-label">Planta Eléctrica</span>
-            </label>
-
-          
-            
-            <label class="toggle">
-              <input class="toggle-checkbox" type="checkbox" name="pozo" value="Item 1" v-model="pozo">
-              <div class="toggle-switch"></div>
-              <span class="toggle-label">Pozo</span>
-            </label>
-
-            
-            
-            <label class="toggle">
-              <input class="toggle-checkbox" type="checkbox" name="satelite" value="Item 1" v-model="satelite">
-              <div class="toggle-switch"></div>
-              <span class="toggle-label">Satélite</span>
-            </label>
-
-            
-            <label class="toggle">
-              <input class="toggle-checkbox" type="checkbox" name="sauna" value="Item 1" v-model="sauna">
-              <div class="toggle-switch"></div>
-              <span class="toggle-label">Sauna</span>
-            </label>
-
-        
-            
-            <label class="toggle">
-              <input class="toggle-checkbox" type="checkbox" name="seguridad" value="Item 1" v-model="seguridad">
-              <div class="toggle-switch"></div>
-              <span class="toggle-label">Seguridad 24 Horas</span>
-            </label>
-
-            
-            <label class="toggle">
-              <input class="toggle-checkbox" type="checkbox" name="shutters" value="Item 1" v-model="shutters">
-              <div class="toggle-switch"></div>
-              <span class="toggle-label">Shutters</span>
-            </label>
-
-         
-            
-            <label class="toggle">
-              <input class="toggle-checkbox" type="checkbox" name="terraza" value="Item 1" v-model="terraza">
-              <div class="toggle-switch"></div>
-              <span class="toggle-label">Terraza</span>
-            </label>
-
-            
-            
-            <label class="toggle">
-              <input class="toggle-checkbox" type="checkbox" name="vestidores" value="Item 1" v-model="vestidores">
-              <div class="toggle-switch"></div>
-              <span class="toggle-label">Vestidores</span>
-            </label>
-
-        
-            
-            <label class="toggle">
-              <input class="toggle-checkbox" type="checkbox" name="closet" value="Item 1" v-model="closet">
-              <div class="toggle-switch"></div>
-              <span class="toggle-label">Walk In Closet</span>
-            </label>
-
-     
-
-
-          </ul>
-
+          <!-- Video -->
+          <div class="normal-prediction">
+            <div class="basic-3">
+              <div class="container">
+                <div class="row">
+                  <div class="col-lg-12">
+                    <h2>Tu propiedad vale:</h2>
+                  </div> <!-- end of col -->
+                </div> <!-- end of row -->
+                <div class="row">
+                  <div class="col-lg-12">
+                    <!-- Video Preview -->
+                    <div class="image-container">
+                      <div class="video-wrapper">
+                        <img class="img-fluid" src="src\assets\images\2057.png" alt="alternative">
+                      </div> <!-- end of video-wrapper -->
+                    </div> <!-- end of image-container -->
+                    <!-- end of video preview -->
+                    <p style="font-size: 25px;"><strong>Precio de renta mensual</strong></p>
+                    <p style="font-size: 20px;"><strong>RD $ {{ estimado }}</strong></p>
+                    <!-- <p style="font-size: 15px;">Tarifa de limpieza:</p>
+                        <p style="font-size: 15px;"> RD $ ...</p>-->
+                  </div> <!-- end of col -->
+                </div> <!-- end of row -->
+              </div>
+            </div>
+          </div>
+          <!-- end of basic-3 -->
+          <!-- end of video -->
         </div>
+      </div>
+      <div class="res-prediction">
+        <div class="row">
+          <div class="col-lg-12">
+            <h2 style="text-align: center;  padding-bottom: 20px;">Tu propiedad vale</h2>
+          </div> <!-- end of col -->
+        </div> <!-- end of row -->
+        <div class="row">
+          <div class="col-lg-12">
+            <!-- Video Preview -->
+            <div class="image-container">
+              <div class="video-wrapper">
+                <img class="img-fluid" src="src\assets\images\2057.png" alt="alternative">
+                <p style="font-size: 25px; text-align: center;  padding-top: 20px;"><strong>Precio de renta
+                    mensual</strong></p>
+                <p style="font-size: 20px; text-align: center;  padding-top: 20px;"><strong>RD $ {{ estimado }}</strong></p>
+              </div> <!-- end of video-wrapper -->
+            </div> <!-- end of image-container -->
+            <!-- end of video preview -->
 
-
+            <!-- <p style="font-size: 15px;">Tarifa de limpieza:</p>
+                <p style="font-size: 15px;"> RD $ ...</p>-->
+          </div> <!-- end of col -->
+        </div> <!-- end of row -->
       </div>
 
 
 
-    </form>
-  </div>
-  <div class="button">
-    <button v-on:click="consultar()" type="submit">Estimar</button>
-  </div>
-
-
-  <div class="modal" :class="{ hide: hideModal }">
-    <div class="modal-title">
-      Resultado
-    </div>
-    <div class="modalparent">
-
-      <div class="modal-body">
-        RD$ {{ estimado }} /mes
-      </div>
-      <div class="modal-details">
-        Habitaciones: {{ rooms }}
-        <br>
-        Baños: {{ bathrooms }}
-        <br>
-        Tamaño: {{ squarefootage }} m²
-
-      </div>
     </div>
 
-  </div>
 
-  <div class="modal-background" :class="{ hide: hideModal }" v-on:click="exitmodal()">
-
-  </div>
 </template>
 
-<style>
-.list {
-  list-style: none;
-  max-width: 700px;
-  height: 350px;
+<style scoped>
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: "Inter", Arial, Helvetica, sans-serif;
+}
+
+.formbold-mb-5 {
+  margin-bottom: 20px;
+}
+
+.formbold-pt-3 {
+  padding-top: 12px;
+}
+
+.formbold-main-wrapper {
   display: flex;
-  flex-direction: column;
-  flex-wrap: wrap;
-  margin-left: 30px;
-
-
+  align-items: center;
+  justify-content: center;
+  padding: 48px;
 }
 
-h3 {
-  font-family: Nunito;
-  font-weight: 400;
-  font-size: 15px;
-
-}
-
-input[type="checkbox"] {
-  margin-right: 5px;
-  margin-left: 20px;
-
-}
-
-.flex-container {
+.formbold-form-wrapper {
   margin: 0 auto;
-  margin-top: 5px;
-  border-radius: 10px;
-  max-width: 800px;
-  
-
+  max-width: 550px;
+  width: 100%;
+  background: white;
 }
 
-.comodidades {
-  text-align: left;
-  width: auto;
-  margin-left: 20px;
-
-
+.formbold-form-label {
+  display: block;
+  font-weight: 500;
+  font-size: 16px;
+  color: #07074d;
+  margin-bottom: 12px;
 }
 
-.form-item {
-  margin: 0 auto;
-  text-align: start;
-  width: auto;
-
-
+.formbold-form-label-2 {
+  font-weight: 600;
+  font-size: 20px;
+  margin-bottom: 20px;
 }
 
-.button {
-  margin-top: 30px;
+.formbold-form-input {
+  width: 100%;
+  padding: 12px 24px;
+  border-radius: 6px;
+  border: 1px solid #e0e0e0;
+  background: white;
+  font-weight: 500;
+  font-size: 16px;
+  color: #6b7280;
+  outline: none;
+  resize: none;
+}
+
+.formbold-form-input:focus {
+  border-color: #002D62;
+  box-shadow: 0px 3px 8px rgba(0, 0, 0, 0.05);
+}
+
+.formbold-btn {
   text-align: center;
-  width: auto;
-
+  font-size: 16px;
+  border-radius: 6px;
+  padding: 14px 32px;
+  border: none;
+  font-weight: 600;
+  background-color: #CE1126;
+  color: white;
+  width: 100%;
+  cursor: pointer;
 }
 
-form {
-  max-width: 700px;
-  margin: 0 auto;
+.formbold-btn:hover {
+  box-shadow: 0px 3px 8px rgba(0, 0, 0, 0.05);
+}
+
+.formbold--mx-3 {
+  margin-left: -12px;
+  margin-right: -12px;
+}
+
+.formbold-px-3 {
+  padding-left: 12px;
+  padding-right: 12px;
+}
+
+.flex {
   display: flex;
-  flex-direction: row;
+}
+
+.flex-wrap {
   flex-wrap: wrap;
+}
 
+.w-full {
+  width: 100%;
+}
 
+@media (min-width: 540px) {
+  .sm\:w-half {
+    width: 50%;
+  }
+}
+
+/* container */
+.responsive-two-column-grid {
+  display: block;
+}
+
+/* columns */
+.responsive-two-column-grid>* {
+  padding: 1rem;
+}
+
+/* tablet breakpoint */
+@media (min-width:768px) {
+  .responsive-two-column-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+body,
+html {
+  width: 100%;
+  height: 100%;
+}
+
+body,
+p {
+  color: #626262;
+  font: 400 0.875rem/1.375rem "Raleway", sans-serif;
+}
+
+.p-large {
+  font: 400 1rem/1.5rem "Raleway", sans-serif;
+}
+
+.p-small {
+  font: 400 0.75rem/1.25rem "Raleway", sans-serif;
+}
+
+.p-heading {
+  margin-bottom: 3.875rem;
+}
+
+.li-space-lg li {
+  margin-bottom: 0.25rem;
+}
+
+.indent {
+  padding-left: 1.25rem;
+}
+
+h1 {
+  color: #393939;
+  font: 700 3rem/3.5rem "Raleway", sans-serif;
 }
 
 h2 {
-  font-size: 30px;
-  font-family: Nunito;
-  font-weight: 700;
-  margin: 0 auto;
-  text-align: center;
+  color: #393939;
+  font: 700 2.25rem/2.75rem "Raleway", sans-serif;
+}
 
+h3 {
+  color: #393939;
+  font: 700 1.75rem/2rem "Raleway", sans-serif;
+}
+
+h4 {
+  color: #393939;
+  font: 700 1.375rem/1.875rem "Raleway", sans-serif;
+}
+
+h5 {
+  color: #393939;
+  font: 700 1.125rem/1.625rem "Raleway", sans-serif;
+}
+
+h6 {
+  color: #393939;
+  font: 700 1rem/1.5rem "Raleway", sans-serif;
+}
+
+a {
+  color: #626262;
+  text-decoration: underline;
+}
+
+a:hover {
+  color: #626262;
+  text-decoration: underline;
+}
+
+a.turquoise {
+  color: #CE1126;
 }
 
 
-label {
-  display: block;
-  font-family: Nunito;
-  font-weight: 600;
-  margin-bottom: 5px;
-  font-size: 16px;
 
+.testimonial-text {
+  font: italic 400 1rem/1.5rem "Raleway", sans-serif;
 }
 
-input[type="number"],
-input[type="email"],
-input[type="password"],
-select {
-  width: 80%;
-  padding: 10px;
-  margin-bottom: 15%;
-  border-radius: 10px;
-  border: none;
-  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
-  
+.testimonial-author {
+  font: 700 1rem/1.5rem "Raleway", sans-serif;
 }
 
-button[type="submit"] {
-  margin: 2%;
-  background-color: #E63946;
-  color: white;
-  padding: 10px 20px;
-  border: none;
-  border-radius: 5px;
-  font-family: nunito;
-  font-weight: bold;
-  cursor: pointer;
-  font-size: 18px;
-  border-radius: 50px;
-  transition: background-color 0.3s ease-in-out;
-  margin: 0 auto;
-  text-align: center;
+.turquoise {
+  color: #CE1126;
 }
 
-button[type="submit"]:hover {
-  background-color: #b3313b;
+.btn-solid-reg {
+  display: inline-block;
+  padding: 1.1875rem 2.125rem 1.1875rem 2.125rem;
+  border: 0.125rem solid #CE1126;
+  border-radius: 2rem;
+  background-color: #CE1126;
+  color: #fff;
+  font: 700 0.75rem/0 "Raleway", sans-serif;
+  text-decoration: none;
+  transition: all 0.2s;
 }
 
-.modal {
-  background: #ffffff;
+.btn-solid-reg:hover {
+  background-color: transparent;
+  color: #CE1126;
+  text-decoration: none;
+}
+
+.btn-solid-lg {
+  display: inline-block;
+  padding: 1.375rem 2.625rem 1.375rem 2.625rem;
+  border: 0.125rem solid #CE1126;
+  border-radius: 2rem;
+  background-color: #CE1126;
+  color: #fff;
+  font: 700 0.75rem/0 "Raleway", sans-serif;
+  text-decoration: none;
+  transition: all 0.2s;
+}
+
+.btn-solid-lg:hover {
+  background-color: transparent;
+  color: #CE1126;
+  text-decoration: none;
+}
+
+.btn-outline-reg {
+  display: inline-block;
+  padding: 1.1875rem 2.125rem 1.1875rem 2.125rem;
+  border: 0.125rem solid #CE1126;
+  border-radius: 2rem;
+  background-color: transparent;
+  color: #CE1126;
+  font: 700 0.75rem/0 "Raleway", sans-serif;
+  text-decoration: none;
+  transition: all 0.2s;
+}
+
+.btn-outline-reg:hover {
+  background-color: #CE1126;
+  color: #fff;
+  text-decoration: none;
+}
+
+.btn-outline-lg {
+  display: inline-block;
+  padding: 1.375rem 2.625rem 1.375rem 2.625rem;
+  border: 0.125rem solid #CE1126;
+  border-radius: 2rem;
+  background-color: transparent;
+  color: #CE1126;
+  font: 700 0.75rem/0 "Raleway", sans-serif;
+  text-decoration: none;
+  transition: all 0.2s;
+}
+
+.btn-outline-lg:hover {
+  background-color: #CE1126;
+  color: #fff;
+  text-decoration: none;
+}
+
+.btn-outline-sm {
+  display: inline-block;
+  padding: 1rem 1.625rem 0.875rem 1.625rem;
+  border: 0.125rem solid #CE1126;
+  border-radius: 2rem;
+  background-color: transparent;
+  color: #CE1126;
+  font: 700 0.625rem/0 "Raleway", sans-serif;
+  text-decoration: none;
+  transition: all 0.2s;
+}
+
+.btn-outline-sm:hover {
+  background-color: #CE1126;
+  color: #fff;
+  text-decoration: none;
+}
+
+.form-group {
+  position: relative;
+  margin-bottom: 1.25rem;
+}
+
+.form-group.has-error.has-danger {
+  margin-bottom: 0.625rem;
+}
+
+.form-group.has-error.has-danger .help-block.with-errors ul {
+  margin-top: 0.375rem;
+}
+
+.label-control {
   position: absolute;
-  max-width: 50%;
-  min-width: 40%;
-  height: 250px;
-  left: 50%;
-  top: 50%;
-  padding: 12px 25px;
-  transform: translate(-50%, -50%);
-  z-index: 1;
-  border-radius: 10px;
-  box-shadow: 0px 9px 6px 0px rgba(0, 0, 0, 0.11);
-  
-
+  top: 0.87rem;
+  left: 1.375rem;
+  color: #626262;
+  opacity: 1;
+  font: 400 0.875rem/1.375rem "Raleway", sans-serif;
+  cursor: text;
+  transition: all 0.2s ease;
 }
 
-.modal-background {
-  position: fixed;
-  top: 0;
-  width: 100%;
-  height: 100%;
-  background: #00000073
+/* IE10+ hack to solve lower label text position compared to the rest of the browsers */
+@media screen and (-ms-high-contrast: active),
+screen and (-ms-high-contrast: none) {
+  .label-control {
+    top: 0.9375rem;
+  }
 }
 
-.modal-title {
-  font-size: 30px;
-  font-family: Nunito;
+.form-control-input:focus+.label-control,
+.form-control-input.notEmpty+.label-control,
+.form-control-textarea:focus+.label-control,
+.form-control-textarea.notEmpty+.label-control {
+  top: 0.125rem;
+  opacity: 1;
+  font-size: 0.75rem;
   font-weight: 700;
-  margin: 0 auto;
-
 }
 
-.modalparent {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: center;
+.form-control-input,
+.form-control-select {
+  display: block;
+  /* needed for proper display of the label in Firefox, IE, Edge */
+  width: 100%;
+  padding-top: 1.0625rem;
+  padding-bottom: 0.0625rem;
+  padding-left: 1.3125rem;
+  border: 1px solid #c4d8dc;
+  border-radius: 0.25rem;
+  background-color: #fff;
+  color: #626262;
+  font: 400 0.875rem/1.875rem "Raleway", sans-serif;
+  transition: all 0.2s;
+  -webkit-appearance: none;
+  /* removes inner shadow on form inputs on ios safari */
 }
 
-.modal-body {
-  font-size: 20px;
-  font-family: Nunito;
-
+.form-control-select {
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+  height: 3rem;
 }
 
-.hide {
+/* IE10+ hack to solve lower label text position compared to the rest of the browsers */
+@media screen and (-ms-high-contrast: active),
+screen and (-ms-high-contrast: none) {
+  .form-control-input {
+    padding-top: 1.25rem;
+    padding-bottom: 0.75rem;
+    line-height: 1.75rem;
+  }
+
+  .form-control-select {
+    padding-top: 0.875rem;
+    padding-bottom: 0.75rem;
+    height: 3.125rem;
+    line-height: 2.125rem;
+  }
+}
+
+select {
+  /* you should keep these first rules in place to maintain cross-browser behavior */
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  -ms-appearance: none;
+  -o-appearance: none;
+  appearance: none;
+  background-image: url('src/assets/images/down-arrow.png');
+  background-position: 96% 50%;
+  background-repeat: no-repeat;
+  outline: none;
+}
+
+select::-ms-expand {
+  display: none;
+  /* removes the ugly default down arrow on select form field in IE11 */
+}
+
+.form-control-textarea {
+  display: block;
+  /* used to eliminate a bottom gap difference between Chrome and IE/FF */
+  width: 100%;
+  height: 8rem;
+  /* used instead of html rows to normalize height between Chrome and IE/FF */
+  padding-top: 1.25rem;
+  padding-left: 1.3125rem;
+  border: 1px solid #c4d8dc;
+  border-radius: 0.25rem;
+  background-color: #fff;
+  color: #626262;
+  font: 400 0.875rem/1.75rem "Raleway", sans-serif;
+  transition: all 0.2s;
+}
+
+.form-control-input:focus,
+.form-control-select:focus,
+.form-control-textarea:focus {
+  border: 1px solid #a1a1a1;
+  outline: none;
+  /* Removes blue border on focus */
+}
+
+.form-control-input:hover,
+.form-control-select:hover,
+.form-control-textarea:hover {
+  border: 1px solid #a1a1a1;
+}
+
+.checkbox {
+  font: 400 0.75rem/1.25rem "Raleway", sans-serif;
+}
+
+input[type='checkbox'] {
+  vertical-align: -15%;
+  margin-right: 0.375rem;
+}
+
+/* IE10+ hack to raise checkbox field position compared to the rest of the browsers */
+@media screen and (-ms-high-contrast: active),
+screen and (-ms-high-contrast: none) {
+  input[type='checkbox'] {
+    vertical-align: -9%;
+  }
+}
+
+.form-control-submit-button {
+  display: inline-block;
+  width: 100%;
+  height: 3.125rem;
+  border: 1px solid #CE1126;
+  border-radius: 1.5rem;
+  background-color: #CE1126;
+  color: #fff;
+  font: 700 0.75rem/1.75rem "Raleway", sans-serif;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.form-control-submit-button:hover {
+  background-color: transparent;
+  color: #CE1126;
+}
+
+/* Form Success And Error Message Formatting */
+#rmsgSubmit.h3.text-center.tada.animated,
+#cmsgSubmit.h3.text-center.tada.animated,
+#pmsgSubmit.h3.text-center.tada.animated,
+#rmsgSubmit.h3.text-center,
+#cmsgSubmit.h3.text-center,
+#pmsgSubmit.h3.text-center {
+  display: block;
+  margin-bottom: 0;
+  color: #626262;
+  font: 400 1.125rem/1rem "Raleway", sans-serif;
+}
+
+.help-block.with-errors .list-unstyled {
+  color: #626262;
+  font-size: 0.75rem;
+  line-height: 1.125rem;
+  text-align: left;
+}
+
+.help-block.with-errors ul {
+  margin-bottom: 0;
+}
+
+/* end of form success and error message formatting */
+
+/* Form Success And Error Message Animation - Animate.css */
+@-webkit-keyframes tada {
+  from {
+    -webkit-transform: scale3d(1, 1, 1);
+    -ms-transform: scale3d(1, 1, 1);
+    transform: scale3d(1, 1, 1);
+  }
+
+  10%,
+  20% {
+    -webkit-transform: scale3d(.9, .9, .9) rotate3d(0, 0, 1, -3deg);
+    -ms-transform: scale3d(.9, .9, .9) rotate3d(0, 0, 1, -3deg);
+    transform: scale3d(.9, .9, .9) rotate3d(0, 0, 1, -3deg);
+  }
+
+  30%,
+  50%,
+  70%,
+  90% {
+    -webkit-transform: scale3d(1.1, 1.1, 1.1) rotate3d(0, 0, 1, 3deg);
+    -ms-transform: scale3d(1.1, 1.1, 1.1) rotate3d(0, 0, 1, 3deg);
+    transform: scale3d(1.1, 1.1, 1.1) rotate3d(0, 0, 1, 3deg);
+  }
+
+  40%,
+  60%,
+  80% {
+    -webkit-transform: scale3d(1.1, 1.1, 1.1) rotate3d(0, 0, 1, -3deg);
+    -ms-transform: scale3d(1.1, 1.1, 1.1) rotate3d(0, 0, 1, -3deg);
+    transform: scale3d(1.1, 1.1, 1.1) rotate3d(0, 0, 1, -3deg);
+  }
+
+  to {
+    -webkit-transform: scale3d(1, 1, 1);
+    -ms-transform: scale3d(1, 1, 1);
+    transform: scale3d(1, 1, 1);
+  }
+}
+
+@keyframes tada {
+  from {
+    -webkit-transform: scale3d(1, 1, 1);
+    -ms-transform: scale3d(1, 1, 1);
+    transform: scale3d(1, 1, 1);
+  }
+
+  10%,
+  20% {
+    -webkit-transform: scale3d(.9, .9, .9) rotate3d(0, 0, 1, -3deg);
+    -ms-transform: scale3d(.9, .9, .9) rotate3d(0, 0, 1, -3deg);
+    transform: scale3d(.9, .9, .9) rotate3d(0, 0, 1, -3deg);
+  }
+
+  30%,
+  50%,
+  70%,
+  90% {
+    -webkit-transform: scale3d(1.1, 1.1, 1.1) rotate3d(0, 0, 1, 3deg);
+    -ms-transform: scale3d(1.1, 1.1, 1.1) rotate3d(0, 0, 1, 3deg);
+    transform: scale3d(1.1, 1.1, 1.1) rotate3d(0, 0, 1, 3deg);
+  }
+
+  40%,
+  60%,
+  80% {
+    -webkit-transform: scale3d(1.1, 1.1, 1.1) rotate3d(0, 0, 1, -3deg);
+    -ms-transform: scale3d(1.1, 1.1, 1.1) rotate3d(0, 0, 1, -3deg);
+    transform: scale3d(1.1, 1.1, 1.1) rotate3d(0, 0, 1, -3deg);
+  }
+
+  to {
+    -webkit-transform: scale3d(1, 1, 1);
+    -ms-transform: scale3d(1, 1, 1);
+    transform: scale3d(1, 1, 1);
+  }
+}
+
+.tada {
+  -webkit-animation-name: tada;
+  animation-name: tada;
+}
+
+.animated {
+  -webkit-animation-duration: 1s;
+  animation-duration: 1s;
+  -webkit-animation-fill-mode: both;
+  animation-fill-mode: both;
+}
+
+/* end of form success and error message animation - Animate.css */
+
+/* Fade-move Animation For Lightbox - Magnific Popup */
+/* at start */
+.my-mfp-slide-bottom .zoom-anim-dialog {
+  opacity: 0;
+  transition: all 0.2s ease-out;
+  -webkit-transform: translateY(-1.25rem) perspective(37.5rem) rotateX(10deg);
+  -ms-transform: translateY(-1.25rem) perspective(37.5rem) rotateX(10deg);
+  transform: translateY(-1.25rem) perspective(37.5rem) rotateX(10deg);
+}
+
+/* animate in */
+.my-mfp-slide-bottom.mfp-ready .zoom-anim-dialog {
+  opacity: 1;
+  -webkit-transform: translateY(0) perspective(37.5rem) rotateX(0);
+  -ms-transform: translateY(0) perspective(37.5rem) rotateX(0);
+  transform: translateY(0) perspective(37.5rem) rotateX(0);
+}
+
+/* animate out */
+.my-mfp-slide-bottom.mfp-removing .zoom-anim-dialog {
+  opacity: 0;
+  -webkit-transform: translateY(-0.625rem) perspective(37.5rem) rotateX(10deg);
+  -ms-transform: translateY(-0.625rem) perspective(37.5rem) rotateX(10deg);
+  transform: translateY(-0.625rem) perspective(37.5rem) rotateX(10deg);
+}
+
+/* dark overlay, start state */
+.my-mfp-slide-bottom.mfp-bg {
+  opacity: 0;
+  transition: opacity 0.2s ease-out;
+}
+
+/* animate in */
+.my-mfp-slide-bottom.mfp-ready.mfp-bg {
+  opacity: 0.8;
+}
+
+/* animate out */
+.my-mfp-slide-bottom.mfp-removing.mfp-bg {
+  opacity: 0;
+}
+
+/* end of fade-move animation for lightbox - magnific popup */
+
+/* Fade Animation For Image Slider - Magnific Popup */
+@-webkit-keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+.fadeIn {
+  -webkit-animation: fadeIn 0.6s;
+  animation: fadeIn 0.6s;
+}
+
+@-webkit-keyframes fadeOut {
+  from {
+    opacity: 1;
+  }
+
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes fadeOut {
+  from {
+    opacity: 1;
+  }
+
+  to {
+    opacity: 0;
+  }
+}
+
+.fadeOut {
+  -webkit-animation: fadeOut 0.8s;
+  animation: fadeOut 0.8s;
+}
+
+/* end of fade animation for image slider - magnific popup */
+
+
+/*************************/
+/*     02. Preloader     */
+/*************************/
+.spinner-wrapper {
+  position: fixed;
+  z-index: 999999;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  background: #fff;
+}
+
+.spinner {
+  position: absolute;
+  top: 50%;
+  /* centers the loading animation vertically one the screen */
+  left: 50%;
+  /* centers the loading animation horizontally one the screen */
+  width: 3.75rem;
+  height: 1.25rem;
+  margin: -0.625rem 0 0 -1.875rem;
+  /* is width and height divided by two */
+  text-align: center;
+}
+
+.spinner>div {
+  display: inline-block;
+  width: 1rem;
+  height: 1rem;
+  border-radius: 100%;
+  background-color: #002D62;
+  -webkit-animation: sk-bouncedelay 1.4s infinite ease-in-out both;
+  animation: sk-bouncedelay 1.4s infinite ease-in-out both;
+}
+
+.spinner .bounce1 {
+  -webkit-animation-delay: -0.32s;
+  animation-delay: -0.32s;
+}
+
+.spinner .bounce2 {
+  -webkit-animation-delay: -0.16s;
+  animation-delay: -0.16s;
+}
+
+@-webkit-keyframes sk-bouncedelay {
+
+  0%,
+  80%,
+  100% {
+    -webkit-transform: scale(0);
+  }
+
+  40% {
+    -webkit-transform: scale(1.0);
+  }
+}
+
+@keyframes sk-bouncedelay {
+
+  0%,
+  80%,
+  100% {
+    -webkit-transform: scale(0);
+    -ms-transform: scale(0);
+    transform: scale(0);
+  }
+
+  40% {
+    -webkit-transform: scale(1.0);
+    -ms-transform: scale(1.0);
+    transform: scale(1.0);
+  }
+}
+
+
+/**************************/
+/*     03. Navigation     */
+/**************************/
+.navbar-custom {
+  background-color: #fff;
+  box-shadow: 0 0.0625rem 0.375rem 0 rgba(0, 0, 0, 0.1);
+  font: 600 0.875rem/0.875rem "Raleway", sans-serif;
+  transition: all 0.2s;
+}
+
+.navbar-custom .navbar-brand.logo-image img {
+  width: 7.4375rem;
+  height: 2rem;
+}
+
+.navbar-custom .navbar-brand.logo-text {
+  font: 600 2rem/1.5rem "Raleway", sans-serif;
+  color: #CE1126;
+  text-decoration: none;
+}
+
+.navbar-custom .navbar-nav {
+  margin-top: 0.75rem;
+  margin-bottom: 0.5rem;
+}
+
+.navbar-custom .nav-item .nav-link {
+  padding: 0.625rem 0.75rem 0.625rem 0.75rem;
+  color: #CE1126;
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+
+.navbar-custom .nav-item .nav-link:hover,
+.navbar-custom .nav-item .nav-link.active {
+  color: #002D62;
+}
+
+/* Dropdown Menu */
+.navbar-custom .dropdown:hover>.dropdown-menu {
+  display: block;
+  /* this makes the dropdown menu stay open while hovering it */
+  min-width: auto;
+  animation: fadeDropdown 0.2s;
+  /* required for the fade animation */
+}
+
+@keyframes fadeDropdown {
+  0% {
+    opacity: 0;
+  }
+
+  100% {
+    opacity: 1;
+  }
+}
+
+.navbar-custom .dropdown-toggle:focus {
+  /* removes dropdown outline on focus */
+  outline: 0;
+}
+
+.navbar-custom .dropdown-menu {
+  margin-top: 0;
+  border: none;
+  border-radius: 0.25rem;
+  background-color: #fff;
+}
+
+.navbar-custom .dropdown-item {
+  color: #CE1126;
+  text-decoration: none;
+}
+
+.navbar-custom .dropdown-item:hover {
+  background-color: #fff;
+}
+
+.navbar-custom .dropdown-item .item-text {
+  font: 600 0.875rem/0.875rem "Raleway", sans-serif;
+}
+
+.navbar-custom .dropdown-item:hover .item-text {
+  color: #002D62;
+}
+
+.navbar-custom .dropdown-items-divide-hr {
+  width: 100%;
+  height: 1px;
+  margin: 0.75rem auto 0.725rem auto;
+  border: none;
+  background-color: #c4d8dc;
+  opacity: 0.2;
+}
+
+/* end of dropdown menu */
+
+.navbar-custom .social-icons {
   display: none;
 }
 
+.navbar-custom .navbar-toggler {
+  border: none;
+  color: #CE1126;
+  font-size: 2rem;
+}
 
+.navbar-custom button[aria-expanded='false'] .navbar-toggler-awesome.fas.fa-times {
+  display: none;
+}
 
-
-
-
-
-
-
-.toggle {
-  cursor: pointer;
+.navbar-custom button[aria-expanded='false'] .navbar-toggler-awesome.fas.fa-bars {
   display: inline-block;
 }
 
-.toggle-switch {
+.navbar-custom button[aria-expanded='true'] .navbar-toggler-awesome.fas.fa-bars {
+  display: none;
+}
+
+.navbar-custom button[aria-expanded='true'] .navbar-toggler-awesome.fas.fa-times {
   display: inline-block;
-  background: #ccc;
-  border-radius: 16px;
-  width: 54px;
-  height: 28px;
+  margin-right: 0.125rem;
+}
+
+
+/*********************/
+/*    04. Header     */
+/*********************/
+.header {
+  background-color: #fff;
+}
+
+.header .header-content {
+  padding-top: 8rem;
+  padding-bottom: 4rem;
+  text-align: center;
+}
+
+.header .text-container {
+  margin-bottom: 4rem;
+}
+
+.header h1 {
+  margin-bottom: 1.125rem;
+  font-size: 2.5rem;
+  line-height: 3.125rem;
+}
+
+.header .p-large {
+  margin-bottom: 1.875rem;
+}
+
+
+/*************************/
+/*     05. Customers     */
+/*************************/
+.slider-1 {
+  padding-top: 2.25rem;
+  padding-bottom: 2.125rem;
+  text-align: center;
+}
+
+.slider-1 h5 {
+  margin-bottom: 0.75rem;
+}
+
+.slider-1 .slider-container {
+  padding-top: 2.75rem;
+  padding-bottom: 2.75rem;
+  border-radius: 0.5rem;
+  background-color: #f7fcfd;
+}
+
+
+/************************/
+/*     06. Services     */
+/************************/
+.cards-1 {
+  padding-top: 4rem;
+  padding-bottom: 1.625rem;
+  text-align: center;
+}
+
+.cards-1 h2 {
+  margin-bottom: 1rem;
+}
+
+.cards-1 .card {
+  max-width: 21rem;
+  margin-right: auto;
+  margin-bottom: 4.5rem;
+  margin-left: auto;
+  padding: 3.25rem 2rem 2rem 2rem;
+  border: 1px solid #c4d8dc;
+  border-radius: 0.5rem;
+  background: transparent;
+}
+
+.cards-1 .card-image {
+  width: 6rem;
+  height: 6rem;
+  margin-right: auto;
+  margin-bottom: 2rem;
+  margin-left: auto;
+}
+
+.cards-1 .card-title {
+  margin-bottom: 0.875rem;
+}
+
+.cards-1 .card-body {
+  padding: 0;
+}
+
+
+/*************************/
+/*     07. Details 1     */
+/*************************/
+.basic-1 {
+  padding-top: 1.625rem;
+  padding-bottom: 3.75rem;
+}
+
+.basic-1 .text-container {
+  margin-bottom: 4rem;
+}
+
+.basic-1 h2 {
+  margin-bottom: 1.375rem;
+}
+
+.basic-1 .btn-solid-reg {
+  margin-top: 0.625rem;
+}
+
+
+/*************************/
+/*     08. Details 2     */
+/*************************/
+.basic-2 {
+  padding-top: 3.75rem;
+  padding-bottom: 4rem;
+}
+
+.basic-2 .image-container {
+  margin-bottom: 4rem;
+}
+
+.basic-2 h2 {
+  margin-bottom: 1.375rem;
+}
+
+.basic-2 .list-unstyled .fas {
+  color: #002D62;
+  line-height: 1.375rem;
+}
+
+.basic-2 .list-unstyled .media-body {
+  margin-left: 0.625rem;
+}
+
+.basic-2 .btn-solid-reg {
+  margin-top: 0.625rem;
+}
+
+
+/**********************************/
+/*     09. Details Lightboxes     */
+/**********************************/
+.lightbox-basic {
+  margin: 2.5rem auto;
+  padding: 2rem 1.5rem 2rem 1.5rem;
+  border-radius: 0.25rem;
+  background: #fff;
+  text-align: left;
+}
+
+.lightbox-basic .container {
+  padding-right: 0;
+  padding-left: 0;
+}
+
+.lightbox-basic .image-container {
+  max-width: 33.75rem;
+  margin-right: auto;
+  margin-bottom: 3rem;
+  margin-left: auto;
+}
+
+.lightbox-basic h3 {
+  margin-bottom: 0.5rem;
+}
+
+.lightbox-basic hr {
+  width: 2.5rem;
+  height: 0.125rem;
+  margin-top: 0;
+  margin-bottom: 1.25rem;
+  margin-left: 0;
+  border: 0;
+  background-color: #00bfd8;
+  text-align: left;
+}
+
+.lightbox-basic h4 {
+  margin-bottom: 1rem;
+}
+
+.lightbox-basic .list-unstyled .fas {
+  color: #00bfd8;
+  line-height: 1.375rem;
+}
+
+.lightbox-basic .list-unstyled .media-body {
+  margin-left: 0.625rem;
+}
+
+.lightbox-basic .btn-outline-reg,
+.lightbox-basic .btn-solid-reg {
+  margin-top: 0.75rem;
+}
+
+/* Signup Button */
+.lightbox-basic .btn-solid-reg.mfp-close {
   position: relative;
-  vertical-align: middle;
-  transition: background 0.25s;
+  width: auto;
+  height: auto;
+  color: #fff;
+  opacity: 1;
 }
 
-.toggle-switch:before,
-.toggle-switch:after {
-  content: "";
+.lightbox-basic .btn-solid-reg.mfp-close:hover {
+  color: #00bfd8;
 }
 
-.toggle-switch:before {
+/* end of signup Button */
+
+/* Back Button */
+.lightbox-basic a.mfp-close.as-button {
+  position: relative;
+  width: auto;
+  height: auto;
+  margin-left: 0.375rem;
+  color: #00bfd8;
+  opacity: 1;
+}
+
+.lightbox-basic a.mfp-close.as-button:hover {
+  color: #fff;
+}
+
+/* end of back button */
+
+.lightbox-basic button.mfp-close.x-button {
+  position: absolute;
+  top: -0.125rem;
+  right: -0.125rem;
+  width: 2.75rem;
+  height: 2.75rem;
+  color: #707984;
+}
+
+
+/***********************/
+/*     10. Pricing     */
+/***********************/
+.cards-2 {
+  padding-top: 3rem;
+  padding-bottom: 2.75rem;
+  text-align: center;
+}
+
+.cards-2 h2 {
+  margin-bottom: 1rem;
+}
+
+.cards-2 .card {
   display: block;
-  background: linear-gradient(to bottom, #fff 0%, #eee 100%);
-  border-radius: 50%;
+  max-width: 19.5rem;
+  margin-right: auto;
+  margin-bottom: 6rem;
+  margin-left: auto;
+  border: 1px solid #c4d8dc;
+  border-radius: 0.5rem;
+  vertical-align: top;
+}
 
-  width: 20px;
-  height: 20px;
+.cards-2 .card .card-body {
+  padding: 2.5rem 2.75rem 1.875rem 2.5rem;
+}
+
+.cards-2 .card .card-title {
+  margin-bottom: 0.625rem;
+  color: #393939;
+  font-weight: 700;
+  font-size: 1.75rem;
+  line-height: 2.25rem;
+  text-align: center;
+}
+
+.cards-2 .card .card-subtitle {
+  margin-bottom: 1.75rem;
+}
+
+.cards-2 .card .cell-divide-hr {
+  height: 1px;
+  margin-top: 0;
+  margin-bottom: 0;
+  border: none;
+  background-color: #c4d8dc;
+}
+
+.cards-2 .card .price {
+  padding-top: 0.875rem;
+  padding-bottom: 1.5rem;
+}
+
+.cards-2 .card .value {
+  color: #00bfd8;
+  font-weight: 700;
+  font-size: 3.5rem;
+  line-height: 4rem;
+  text-align: center;
+}
+
+.cards-2 .card .currency {
+  margin-right: 0.375rem;
+  color: #00bfd8;
+  font-size: 1.5rem;
+  vertical-align: 56%;
+}
+
+.cards-2 .card .frequency {
+  margin-top: 0.25rem;
+  font-size: 0.875rem;
+  text-align: center;
+}
+
+.cards-2 .card .list-unstyled {
+  margin-top: 1.875rem;
+  margin-bottom: 1.625rem;
+  text-align: left;
+}
+
+.cards-2 .card .list-unstyled.li-space-lg li {
+  margin-bottom: 0.5rem;
+}
+
+.cards-2 .card .list-unstyled .fas {
+  color: #00bfd8;
+  line-height: 1.375rem;
+}
+
+.cards-2 .card .list-unstyled .fas.fa-times {
+  margin-left: 0.1875rem;
+  margin-right: 0.125rem;
+  color: #777b7e;
+}
+
+.cards-2 .card .list-unstyled .media-body {
+  margin-left: 0.625rem;
+}
+
+.cards-2 .card .button-wrapper {
   position: absolute;
-  top: 4px;
-  left: 4px;
-  transition: left 0.25s;
+  right: 0;
+  bottom: -1.25rem;
+  left: 0;
+  text-align: center;
 }
 
-.toggle-checkbox:checked+.toggle-switch {
-  background: #E63946;
-  
+.cards-2 .card .btn-solid-reg:hover {
+  background-color: #fff;
 }
 
-.toggle-checkbox:checked+.toggle-switch:before {
-  left: 30px;
-}
-
-.toggle-checkbox {
+/* Best Value Label */
+.cards-2 .card .label {
   position: absolute;
-
+  top: 0;
+  right: 0;
+  width: 10.625rem;
+  height: 10.625rem;
+  overflow: hidden;
 }
 
-.toggle-label {
-  margin-left: 5px;
+.cards-2 .card .label .best-value {
   position: relative;
-  top: 2px;
-}</style>
+  width: 13.75rem;
+  padding: 0.3125rem 0 0.3125rem 4.125rem;
+  background-color: #00bfd8;
+  color: #fff;
+  -webkit-transform: rotate(45deg) translate3d(0, 0, 0);
+  -ms-transform: rotate(45deg) translate3d(0, 0, 0);
+  transform: rotate(45deg) translate3d(0, 0, 0);
+}
+
+/* end of best value label */
+
+
+/***********************/
+/*     11. Request     */
+/***********************/
+.form-1 {
+  padding-top: 6.875rem;
+  padding-bottom: 6.25rem;
+  background-color: #f9fafc;
+}
+
+.form-1 h2 {
+  margin-bottom: 1.25rem;
+}
+
+.form-1 .list-unstyled {
+  margin-top: 1.375rem;
+}
+
+.form-1 .list-unstyled .fas {
+  color: #00bfd8;
+  line-height: 1.375rem;
+}
+
+.form-1 .list-unstyled .media-body {
+  margin-left: 0.625rem;
+}
+
+.form-1 .text-container {
+  margin-bottom: 3.5rem;
+}
+
+
+/*********************/
+/*     12. Video     */
+/*********************/
+.basic-3 {
+  padding-top: 6.875rem;
+  padding-bottom: 6.125rem;
+}
+
+.basic-3 h2 {
+  margin-bottom: 3rem;
+  text-align: center;
+}
+
+.basic-3 .image-container {
+  margin-bottom: 2.25rem;
+}
+
+.basic-3 .image-container img {
+  border-radius: 0.5rem;
+}
+
+.basic-3 .video-wrapper {
+  position: relative;
+}
+
+/* Video Play Button */
+.basic-3 .video-play-button {
+  position: absolute;
+  z-index: 10;
+  top: 50%;
+  left: 50%;
+  display: block;
+  box-sizing: content-box;
+  width: 2rem;
+  height: 2.75rem;
+  padding: 1.125rem 1.25rem 1.125rem 1.75rem;
+  border-radius: 50%;
+  -webkit-transform: translateX(-50%) translateY(-50%);
+  -ms-transform: translateX(-50%) translateY(-50%);
+  transform: translateX(-50%) translateY(-50%);
+}
+
+.basic-3 .video-play-button:before {
+  content: "";
+  position: absolute;
+  z-index: 0;
+  top: 50%;
+  left: 50%;
+  display: block;
+  width: 4.75rem;
+  height: 4.75rem;
+  border-radius: 50%;
+  background: #00bfd8;
+  animation: pulse-border 1500ms ease-out infinite;
+  -webkit-transform: translateX(-50%) translateY(-50%);
+  -ms-transform: translateX(-50%) translateY(-50%);
+  transform: translateX(-50%) translateY(-50%);
+}
+
+.basic-3 .video-play-button:after {
+  content: "";
+  position: absolute;
+  z-index: 1;
+  top: 50%;
+  left: 50%;
+  display: block;
+  width: 4.375rem;
+  height: 4.375rem;
+  border-radius: 50%;
+  background: #00bfd8;
+  transition: all 200ms;
+  -webkit-transform: translateX(-50%) translateY(-50%);
+  -ms-transform: translateX(-50%) translateY(-50%);
+  transform: translateX(-50%) translateY(-50%);
+}
+
+.basic-3 .video-play-button span {
+  position: relative;
+  display: block;
+  z-index: 3;
+  top: 0.375rem;
+  left: 0.25rem;
+  width: 0;
+  height: 0;
+  border-left: 1.625rem solid #fff;
+  border-top: 1rem solid transparent;
+  border-bottom: 1rem solid transparent;
+}
+
+@keyframes pulse-border {
+  0% {
+    transform: translateX(-50%) translateY(-50%) translateZ(0) scale(1);
+    opacity: 1;
+  }
+
+  100% {
+    transform: translateX(-50%) translateY(-50%) translateZ(0) scale(1.5);
+    opacity: 0;
+  }
+}
+
+/* end of video play button */
+
+.basic-3 p {
+  text-align: center;
+}
+
+
+/****************************/
+/*     13. Testimonials     */
+/****************************/
+.slider-2 {
+  padding-top: 7.5rem;
+  padding-bottom: 7rem;
+  background: url('/src/assets/images/testimonials-background.jpg') center center no-repeat;
+  background-size: cover;
+}
+
+.slider-2 .image-container {
+  margin-bottom: 4rem;
+}
+
+.slider-2 h2 {
+  margin-bottom: 2.5rem;
+  text-align: center;
+}
+
+.slider-2 .slider-container {
+  position: relative;
+}
+
+.slider-2 .swiper-container {
+  position: static;
+  width: 90%;
+  text-align: center;
+}
+
+.slider-2 .swiper-button-prev:focus,
+.slider-2 .swiper-button-next:focus {
+  /* even if you can't see it chrome you can see it on mobile device */
+  outline: none;
+}
+
+.slider-2 .swiper-button-prev {
+  left: -0.5rem;
+  background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D'http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg'%20viewBox%3D'0%200%2028%2044'%3E%3Cpath%20d%3D'M0%2C22L22%2C0l2.1%2C2.1L4.2%2C22l19.9%2C19.9L22%2C44L0%2C22L0%2C22L0%2C22z'%20fill%3D'%23626262'%2F%3E%3C%2Fsvg%3E");
+  background-size: 1.125rem 1.75rem;
+}
+
+.slider-2 .swiper-button-next {
+  right: -0.5rem;
+  background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D'http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg'%20viewBox%3D'0%200%2028%2044'%3E%3Cpath%20d%3D'M27%2C22L27%2C22L5%2C44l-2.1-2.1L22.8%2C22L2.9%2C2.1L5%2C0L27%2C22L27%2C22z'%20fill%3D'%23626262'%2F%3E%3C%2Fsvg%3E");
+  background-size: 1.125rem 1.75rem;
+}
+
+.slider-2 .card {
+  position: relative;
+  border: none;
+  background-color: transparent;
+}
+
+.slider-2 .card-image {
+  width: 7rem;
+  height: 7rem;
+  margin-right: auto;
+  margin-bottom: 0.25rem;
+  margin-left: auto;
+  border-radius: 50%;
+}
+
+.slider-2 .card-body {
+  padding-bottom: 0;
+}
+
+.slider-2 .testimonial-author {
+  margin-bottom: 0;
+}
+
+
+/*********************/
+/*     14. About     */
+/*********************/
+.basic-4 {
+  padding-top: 7rem;
+  padding-bottom: 4rem;
+  text-align: center;
+}
+
+.basic-4 h2 {
+  margin-bottom: 1rem;
+  text-align: center;
+}
+
+.basic-4 .team-member {
+  max-width: 12.5rem;
+  margin-right: auto;
+  margin-bottom: 3.5rem;
+  margin-left: auto;
+}
+
+/* Hover Animation */
+.basic-4 .image-wrapper {
+  overflow: hidden;
+  margin-bottom: 1.5rem;
+  border-radius: 50%;
+}
+
+.basic-4 .image-wrapper img {
+  margin: 0;
+  transition: all 0.3s;
+}
+
+.basic-4 .image-wrapper:hover img {
+  -moz-transform: scale(1.15);
+  -webkit-transform: scale(1.15);
+  transform: scale(1.15);
+}
+
+/* end of hover animation */
+
+.basic-4 .team-member .p-large {
+  margin-bottom: 0.25rem;
+  font-size: 1.125rem;
+}
+
+.basic-4 .team-member .job-title {
+  margin-bottom: 0.375rem;
+}
+
+.basic-4 .fa-stack {
+  margin-top: 0.375rem;
+  margin-right: 0.125rem;
+  margin-left: 0.125rem;
+  font-size: 0.875rem;
+}
+
+.basic-4 .fa-stack-2x {
+  color: #CE1126;
+  transition: all 0.2s ease;
+}
+
+.basic-4 .fa-stack-1x {
+  color: #fff;
+  transition: all 0.2s ease;
+}
+
+.basic-4 .fa-stack:hover .fa-stack-2x {
+  color: #002D62;
+}
+
+.basic-4 .fa-stack:hover .fa-stack-1x {
+  color: #fff;
+}
+
+
+/***********************/
+/*     15. Contact     */
+/***********************/
+.form-2 {
+  padding-top: 7rem;
+  padding-bottom: 6.25rem;
+  background: url('/src/assets/images/contact-background.jpg') center center no-repeat;
+  background-size: cover;
+}
+
+.form-2 h2 {
+  margin-bottom: 1rem;
+  text-align: center;
+}
+
+.form-2 .list-unstyled {
+  margin-bottom: 3.75rem;
+  font-size: 1rem;
+  line-height: 1.5rem;
+  text-align: center;
+}
+
+.form-2 .list-unstyled .fas,
+.form-2 .list-unstyled .fab {
+  margin-right: 0.5rem;
+  font-size: 0.875rem;
+  color: #002D62;
+}
+
+.form-2 .list-unstyled .fa-phone {
+  vertical-align: 3%;
+}
+
+.form-2 .map-responsive {
+  position: relative;
+  overflow: hidden;
+  height: 0;
+  margin-bottom: 4rem;
+  padding-bottom: 70%;
+  border-radius: 0.25rem;
+}
+
+.form-2 .map-responsive iframe {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border: none;
+}
+
+
+/**********************/
+/*     16. Footer     */
+/**********************/
+.footer {
+  padding-top: 4.625rem;
+  padding-bottom: 0.5rem;
+}
+
+.footer .footer-col {
+  margin-bottom: 2.25rem;
+}
+
+.footer h4 {
+  margin-bottom: 1rem;
+}
+
+.footer .list-unstyled .fas {
+  color: #00bfd8;
+  font-size: 0.5rem;
+  line-height: 1.375rem;
+}
+
+.footer .list-unstyled .media-body {
+  margin-left: 0.625rem;
+}
+
+.footer .fa-stack {
+  margin-bottom: 0.75rem;
+  margin-right: 0.5rem;
+  font-size: 1.5rem;
+}
+
+.footer .fa-stack .fa-stack-1x {
+  color: #fff;
+  transition: all 0.2s ease;
+}
+
+.footer .fa-stack .fa-stack-2x {
+  color: #00bfd8;
+  transition: all 0.2s ease;
+}
+
+.footer .fa-stack:hover .fa-stack-1x {
+  color: #fff;
+}
+
+.footer .fa-stack:hover .fa-stack-2x {
+  color: #002D62;
+}
+
+
+/*************************/
+/*     17. Copyright     */
+/*************************/
+.copyright {
+  padding-top: 1rem;
+  padding-bottom: 0.375rem;
+  text-align: center;
+}
+
+.copyright .p-small {
+  padding-top: 1.375rem;
+  border-top: 1px solid #c4d8dc;
+  opacity: 0.7;
+}
+
+
+/**********************************/
+/*     18. Back To Top Button     */
+/**********************************/
+a.back-to-top {
+  position: fixed;
+  z-index: 999;
+  right: 0.75rem;
+  bottom: 0.75rem;
+  display: none;
+  width: 2.625rem;
+  height: 2.625rem;
+  border-radius: 1.875rem;
+  background: #CE1126 url("../images/up-arrow.png") no-repeat center 47%;
+  background-size: 1.125rem 1.125rem;
+  text-indent: -9999px;
+}
+
+a:hover.back-to-top {
+  background-color: #002D62;
+}
+
+
+/***************************/
+/*     19. Extra Pages     */
+/***************************/
+.ex-header {
+  padding-top: 8rem;
+  padding-bottom: 5rem;
+  text-align: center;
+}
+
+.ex-basic-1 {
+  padding-top: 2rem;
+  padding-bottom: 0.875rem;
+  background-color: #f7fcfd;
+}
+
+.ex-basic-1 .breadcrumbs {
+  margin-bottom: 1.125rem;
+}
+
+.ex-basic-1 .breadcrumbs .fa {
+  margin-right: 0.5rem;
+  margin-left: 0.625rem;
+}
+
+.ex-basic-2 {
+  padding-top: 4.75rem;
+  padding-bottom: 4rem;
+}
+
+.ex-basic-2 h3 {
+  margin-bottom: 1rem;
+}
+
+.ex-basic-2 .text-container {
+  margin-bottom: 3.625rem;
+}
+
+.ex-basic-2 .text-container.last {
+  margin-bottom: 0;
+}
+
+.ex-basic-2 .list-unstyled .fas {
+  color: #002D62;
+  font-size: 0.5rem;
+  line-height: 1.375rem;
+}
+
+.ex-basic-2 .list-unstyled .media-body {
+  margin-left: 0.625rem;
+}
+
+.ex-basic-2 .btn-outline-reg {
+  margin-top: 1.75rem;
+}
+
+.ex-basic-2 .image-container-large {
+  margin-bottom: 4rem;
+}
+
+.ex-basic-2 .image-container-large img {
+  border-radius: 0.25rem;
+}
+
+.ex-basic-2 .image-container-small img {
+  border-radius: 0.25rem;
+}
+
+.ex-basic-2 .text-container.dark-bg {
+  padding: 1.625rem 1.5rem 0.75rem 2rem;
+  background-color: #f9fafc;
+}
+
+/*****************************/
+/*     20. Media Queries     */
+/*****************************/
+/* Min-width width 768px */
+@media (min-width: 768px) {
+
+  /* General Styles */
+  .p-heading {
+    width: 85%;
+    margin-right: auto;
+    margin-left: auto;
+  }
+
+  /* end of general styles */
+
+
+  /* Header */
+  .header .header-content {
+    padding-top: 10.5rem;
+  }
+
+  .header h1 {
+    font-size: 3rem;
+    line-height: 3.5rem;
+  }
+
+  /* end of header */
+
+
+  /* Customers */
+  .slider-1 {
+    padding-top: 3rem;
+    padding-bottom: 2.875rem;
+  }
+
+  .slider-1 .slider-container {
+    padding-right: 3.5rem;
+    padding-left: 3.5rem;
+  }
+
+  /* end of customers */
+
+
+  /* Video */
+  .basic-3 p {
+    width: 85%;
+    margin-right: auto;
+    margin-left: auto;
+  }
+
+  /* end of video */
+
+
+  /* Testimonials */
+  .slider-2 .slider-container {
+    width: 70%;
+    margin-right: auto;
+    margin-left: auto;
+  }
+
+  .slider-2 .swiper-container {
+    width: 85%;
+  }
+
+  .slider-2 .swiper-button-prev {
+    left: 1rem;
+    width: 1.375rem;
+    background-size: 1.375rem 2.125rem;
+  }
+
+  .slider-2 .swiper-button-next {
+    right: 1rem;
+    width: 1.375rem;
+    background-size: 1.375rem 2.125rem;
+  }
+
+  /* end of testimonials */
+
+
+  /* About */
+  .basic-4 .team-member {
+    display: inline-block;
+    width: 12.5rem;
+    margin-right: 2rem;
+    margin-left: 2rem;
+    vertical-align: top;
+  }
+
+  /* end of about */
+
+  /* Contact */
+  .form-2 .list-unstyled li {
+    display: inline-block;
+    margin-right: 0.5rem;
+    margin-left: 0.5rem;
+  }
+
+  .form-2 .list-unstyled .address {
+    display: block;
+  }
+
+  /* end of contact */
+
+
+  /* Extra Pages */
+  .ex-header {
+    padding-top: 11rem;
+    padding-bottom: 9rem;
+  }
+
+  .ex-basic-2 .text-container.dark {
+    padding: 2.5rem 3rem 2rem 3rem;
+  }
+
+  .ex-basic-2 .text-container.column {
+    width: 90%;
+    margin-right: auto;
+    margin-left: auto;
+  }
+
+  /* end of extra pages */
+}
+
+/* end of min-width width 768px */
+
+
+/* Min-width width 992px */
+@media (min-width: 992px) {
+
+  .res-prediction {
+    display: none;
+  }
+
+  /* Navigation */
+  .navbar-custom {
+    padding: 2.125rem 1.5rem 2.125rem 2rem;
+    box-shadow: none;
+    background: transparent;
+  }
+
+  .navbar-custom .navbar-nav {
+    margin-top: 0;
+    margin-bottom: 0;
+  }
+
+  .navbar-custom .nav-item .nav-link {
+    padding: 0.25rem 0.75rem 0.25rem 0.75rem;
+    color: #fff;
+    opacity: 0.8;
+  }
+
+  .navbar-custom .nav-item .nav-link:hover,
+  .navbar-custom .nav-item .nav-link.active {
+    color: #fff;
+    opacity: 1;
+  }
+
+  .navbar-custom.top-nav-collapse {
+    padding: 0.5rem 1.5rem 0.5rem 2rem;
+    box-shadow: 0 0.0625rem 0.375rem 0 rgba(0, 0, 0, 0.1);
+    background-color: #fff;
+  }
+
+  .navbar-custom.top-nav-collapse .nav-item .nav-link {
+    color: #CE1126;
+    opacity: 1;
+  }
+
+  .navbar-custom.top-nav-collapse .nav-item .nav-link:hover,
+  .navbar-custom.top-nav-collapse .nav-item .nav-link.active {
+    color: #002D62;
+  }
+
+  .navbar-custom .dropdown-menu {
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+    border-top: 0.75rem solid rgba(0, 0, 0, 0);
+    border-radius: 0.25rem;
+  }
+
+  .navbar-custom.top-nav-collapse .dropdown-menu {
+    border-top: 0.5rem solid rgba(0, 0, 0, 0);
+    box-shadow: 0 0.375rem 0.375rem 0 rgba(0, 0, 0, 0.02);
+  }
+
+  .navbar-custom .dropdown-item {
+    padding-top: 0.25rem;
+    padding-bottom: 0.25rem;
+  }
+
+  .navbar-custom .dropdown-items-divide-hr {
+    width: 84%;
+  }
+
+  .navbar-custom .social-icons {
+    display: block;
+    margin-left: 0.5rem;
+  }
+
+  .navbar-custom .fa-stack {
+    margin-bottom: 0.1875rem;
+    margin-left: 0.25rem;
+    font-size: 0.75rem;
+  }
+
+  .navbar-custom .fa-stack-2x {
+    color: #002D62;
+    transition: all 0.2s ease;
+  }
+
+  .navbar-custom .fa-stack-1x {
+    color: #fff;
+    transition: all 0.2s ease;
+  }
+
+  .navbar-custom .fa-stack:hover .fa-stack-2x {
+    color: #fff;
+  }
+
+  .navbar-custom .fa-stack:hover .fa-stack-1x {
+    color: #002D62;
+  }
+
+  .navbar-custom.top-nav-collapse .fa-stack-2x {
+    color: #002D62;
+  }
+
+  .navbar-custom.top-nav-collapse .fa-stack-1x {
+    color: #fff;
+  }
+
+  .navbar-custom.top-nav-collapse .fa-stack:hover .fa-stack-2x {
+    color: #002D62;
+  }
+
+  .navbar-custom.top-nav-collapse .fa-stack:hover .fa-stack-1x {
+    color: #fff;
+  }
+
+  /* end of navigation */
+
+
+  /* General Styles */
+  .p-heading {
+    width: 65%;
+  }
+
+  /* end of general styles */
+
+
+  /* Header */
+  .header {
+    background: url('/src/assets/images/header_background.png') center center no-repeat;
+    background-size: cover;
+  }
+
+  .header .header-content {
+    padding-top: 11.5rem;
+    text-align: left;
+  }
+
+  .header .text-container {
+    margin-top: 3rem;
+    margin-bottom: 0;
+  }
+
+  /* end of header */
+
+
+  /* Services */
+  .cards-1 .card {
+    display: inline-block;
+    max-width: 17.125rem;
+    vertical-align: top;
+  }
+
+  .cards-1 .col-lg-12 div.card:nth-child(3n+2) {
+    margin-right: 2rem;
+    margin-left: 2rem;
+  }
+
+  /* end of services */
+
+
+  /* Details 1 */
+  .basic-1 .text-container {
+    margin-top: 3.875rem;
+    margin-bottom: 0;
+  }
+
+  /* end of details 1 */
+
+
+  /* Details 2 */
+  .basic-2 .image-container {
+    margin-bottom: 0;
+  }
+
+  .basic-2 .text-container {
+    margin-top: 3.125rem;
+  }
+
+  /* end of details 2 */
+
+
+  /* Details Lightboxes */
+  .lightbox-basic {
+    max-width: 62.5rem;
+    padding: 2.5rem 2.5rem 2.5rem 2.5rem;
+  }
+
+  .lightbox-basic .image-container {
+    max-width: 100%;
+    margin-right: 2rem;
+    margin-bottom: 0;
+    margin-left: 0.5rem;
+  }
+
+  .lightbox-basic h3 {
+    margin-top: 0.5rem;
+  }
+
+  /* end of details lightboxes */
+
+
+  /* Pricing */
+  .cards-2 .card {
+    display: inline-block;
+    width: 17.125rem;
+    max-width: 100%;
+    margin-right: 1rem;
+    margin-left: 1rem;
+  }
+
+  /* end of pricing */
+
+
+  /* Request */
+  .form-1 {
+    padding-top: 7.5rem;
+  }
+
+  .form-1 .text-container {
+    margin-top: 1.5rem;
+    margin-bottom: 0;
+  }
+
+  /* end of request */
+
+
+  /* Video */
+  .basic-3 .image-container {
+    max-width: 53.125rem;
+    margin-right: auto;
+    margin-left: auto;
+  }
+
+  .basic-3 p {
+    width: 65%;
+  }
+
+  /* end of video */
+
+
+  /* Testimonials */
+  .slider-2 {
+    padding-bottom: 7.5rem;
+  }
+
+  .slider-2 .image-container {
+    margin-bottom: 0;
+  }
+
+  .slider-2 .slider-container {
+    width: 88%;
+  }
+
+  .slider-2 .swiper-container {
+    width: 82%;
+  }
+
+  /* end of testimonials */
+
+
+  /* Contact */
+  .form-2 .map-responsive {
+    margin-bottom: 0;
+  }
+
+  /* end of contact */
+
+
+  /* Extra Pages */
+  .ex-header {
+    background: url('/src/assets/images/header_background.png') center center no-repeat;
+    background-size: cover;
+  }
+
+  .ex-header h1 {
+    width: 80%;
+    margin-right: auto;
+    margin-left: auto;
+  }
+
+  .ex-basic-2 {
+    padding-bottom: 5rem;
+  }
+
+  .ex-basic-2 .text-container.column {
+    margin-bottom: 0;
+  }
+
+  /* end of extra pages */
+}
+
+/* end of min-width width 992px */
+
+@media (max-width: 992px) {
+
+  .normal-prediction {
+    display: none;
+  }
+
+}
+
+/* Min-width width 1200px */
+@media (min-width: 1200px) {
+
+  /* Navigation */
+  .navbar-custom {
+    padding: 2.125rem 5rem 2.125rem 5rem;
+  }
+
+  .navbar-custom.top-nav-collapse {
+    padding: 0.5rem 5rem 0.5rem 5rem;
+  }
+
+  /* end of navigation */
+
+
+  /* General Styles */
+  .p-heading {
+    width: 55%;
+  }
+
+  /* end of general styles */
+
+
+  /* Header */
+  .header .header-content {
+    padding-top: 12.5rem;
+  }
+
+  .header .text-container {
+    margin-top: 5.375rem;
+    margin-left: 1rem;
+    margin-right: 2rem;
+  }
+
+  .header .image-container {
+    margin-left: 2rem;
+    margin-right: 1rem;
+  }
+
+  /* end of header */
+
+
+  /* Customers */
+  .slider-1 .slider-container {
+    margin-right: 3rem;
+    margin-left: 3rem;
+    padding-right: 2.5rem;
+    padding-left: 2.5rem;
+  }
+
+  /* end of customers */
+
+
+  /* Services */
+  .cards-1 .card {
+    max-width: 21rem;
+  }
+
+  .cards-1 .col-lg-12 div.card:nth-child(3n+2) {
+    margin-right: 2.875rem;
+    margin-left: 2.875rem;
+  }
+
+  /* end of services */
+
+
+  /* Details 1 */
+  .basic-1 .text-container {
+    margin-top: 6.125rem;
+    margin-right: 4rem;
+    margin-left: 1rem;
+  }
+
+  /* end of details 1 */
+
+
+  /* Details 2 */
+  .basic-2 .text-container {
+    margin-top: 5.375rem;
+    margin-right: 1rem;
+    margin-left: 4rem;
+  }
+
+  /* end of details 2 */
+
+
+  /* Pricing */
+  .cards-2 .card {
+    width: 19.5rem;
+    margin-right: 1.625rem;
+    margin-left: 1.625rem;
+  }
+
+  /* end of pricing */
+
+
+  /* Request */
+  .form-1 .text-container {
+    margin-right: 1.5rem;
+    margin-left: 6rem;
+  }
+
+  .form-1 form {
+    margin-right: 6rem;
+    margin-left: 1.5rem;
+  }
+
+  /* end of request */
+
+
+  /* Video */
+  .basic-3 p {
+    width: 55%;
+  }
+
+  /* end of video */
+
+
+  /* Testimonials */
+  .slider-2 h2 {
+    margin-top: 3.5rem;
+  }
+
+  /* end of testimonials */
+
+
+  /* About */
+  .basic-4 .team-member {
+    margin-right: 2.25rem;
+    margin-left: 2.25rem;
+  }
+
+  /* end of about */
+
+
+  /* Contact */
+  .form-2 .map-responsive {
+    max-width: 31rem;
+    margin-right: auto;
+    margin-left: auto;
+  }
+
+  .form-2 #contactForm {
+    max-width: 31rem;
+    margin-right: auto;
+    margin-left: auto;
+  }
+
+  /* end of contact */
+
+
+  /* Footer */
+  .footer .footer-col {
+    width: 90%;
+  }
+
+  .footer .footer-col.middle {
+    margin-right: auto;
+    margin-left: auto;
+  }
+
+  .footer .footer-col.last {
+    margin-right: 0;
+    margin-left: auto;
+  }
+
+  /* end of footer */
+
+
+  /* Extra Pages */
+  .ex-header h1 {
+    width: 60%;
+    margin-right: auto;
+    margin-left: auto;
+  }
+
+  .ex-basic-2 .form-container {
+    margin-left: 1.75rem;
+  }
+
+  .ex-basic-2 .image-container-small {
+    margin-left: 1.75rem;
+  }
+
+  /* end of extra pages */
+}
+
+/* end of min-width width 1200px */
+</style>
