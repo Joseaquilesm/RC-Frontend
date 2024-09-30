@@ -1,29 +1,10 @@
-# RouterVueLearning
+# Rental Crawler FE
 
-This template should help get you started developing with Vue 3 in Vite.
+Este repositorio contiene la parte front end de Rental Crawler, que es una herramienta para estimar el valor de renta de una propiedad al ingresar las características del inmueble, le arrojará un aproximado del valor correspondiente.
 
-## Recommended IDE Setup
+## Screenshots de la página web
 
-[VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur) + [TypeScript Vue Plugin (Volar)](https://marketplace.visualstudio.com/items?itemName=Vue.vscode-typescript-vue-plugin).
+![image](https://github.com/user-attachments/assets/19748ab8-d499-4cd0-9150-52e864e54701)
 
-## Customize configuration
+![image](https://github.com/user-attachments/assets/75162a5e-bd44-46fd-a6a0-f8ef2a6bca52)
 
-See [Vite Configuration Reference](https://vitejs.dev/config/).
-
-## Project Setup
-
-```sh
-npm install
-```
-
-### Compile and Hot-Reload for Development
-
-```sh
-npm run dev
-```
-
-### Compile and Minify for Production
-
-```sh
-npm run build
-```
